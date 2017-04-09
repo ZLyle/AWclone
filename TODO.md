@@ -8,16 +8,16 @@ Note that everything implemented MUST be designed such that it can be extended t
   - (Plains, Mountains, Woods, Rivers, Roads, Bridges, Sea, Reefs, (Pipes?))
   - (HQ, City, Factory, Airport, Port, (Silo?))
 - [ ] Create a tool to generate map files as needed.
-  - [ ] Needs either an ASCII interface or (preferably) something made with SDL.
-  - [ ] \(Optional) If we use SDL for the map generator, we need to create basic assets.
+  - Needs either an ASCII interface or (preferably) something made with SDL.
+  - \(Optional) If we use SDL for the map generator, we need to create basic assets.
 - [ ] Implement a basic main menu in the game to load maps (and later: more).
   - Possibly make it call the map generator.
 - [ ] Use SDL to implement a rendering system for the maps.
   - If we did this for the map generator, probably just bring some of that over via a header.
 - [ ] Begin designing and implementing the interface.
-  - [ ] Needs to be able to call up appropriate menus and sub-menus.
-  - [ ] Needs a cursor that can move across the map.
-  - [ ] Have the cursor display info about the tile (and units, later) that is is on.
+  - Needs to be able to call up appropriate menus and sub-menus.
+  - Needs a cursor that can move across the map.
+  - Have the cursor display info about the tile (and units, later) that is is on.
 - [ ] Implement building logic, make the cursor able to select them to call a menu.
 - [ ] Start implementing units.
   - Should probably use some form of composition or inheritance to maximize code reuse.
@@ -33,17 +33,17 @@ Note that everything implemented MUST be designed such that it can be extended t
   - Units should only be able to move once per turn, and reset at the turn start.
   - New units are created in a post-move state.
 - [ ] Start implementing combat mechanics.
-  - [ ] Create faction distinctions.
-  - [ ] Create a way to spawn enemies for testing purposes.
-    - (This will probably happen via building selection implementation, so we need a way to restrict what buildings you can access. It could be useful in testing though, as could setting what faction a unit belongs to.)
-  - [ ] Have movement trigger the option to attack, with menus and all.
-  - [ ] Have combat logic resolve correctly via the fast-attack shit from the first game (where it skips the animation step).
+- [ ] Create faction distinctions.
+- [ ] Create a way to spawn enemies for testing purposes.
+  - (This will probably happen via building selection implementation, so we need a way to restrict what buildings you can access. It could be useful in testing though, as could setting what faction a unit belongs to.)
+- [ ] Have movement trigger the option to attack, with menus and all.
+- [ ] Have combat logic resolve correctly via the fast-attack shit from the first game (where it skips the animation step).
     - Make sure this checks some setting kept elsewhere, so the user can toggle it to show animations or not.
-  - [ ] Units should die, and be removed.
-  - [ ] Implement the ability for allied units to combine to restore health.
-  - [ ] Implement the ability for infantry to capture buildings.
+- [ ] Units should die, and be removed.
+- [ ] Implement the ability for allied units to combine to restore health.
+- [ ] Implement the ability for infantry to capture buildings.
 
-  Add more as you think of it. Placing it in the correct order would be nice.
+Add more as you think of it. Placing it in the correct order would be nice.
 
 #### Less important shit
 
