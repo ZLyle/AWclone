@@ -5,7 +5,7 @@ Note that everything implemented MUST be designed such that it can be extended t
 
 + Implement a data structure to store the map in a file.
     * Need to figure out what the number of tiles are to be possibly stored.
-    * (Plains, Mountains, Woods, Rivers, Roads, Bridges, Sea, Reefs, (Pipes?))
+    * (Plains, Mountains, Woods, Rivers, Roads, Bridges, Sea, Reefs, Shoals (Pipes?))
     * (HQ, City, Factory, Airport, Port, (Silo?))
 + Create a tool to generate map files as needed.
     * Needs either an ASCII interface or (preferably) something made with SDL.
