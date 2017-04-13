@@ -4,20 +4,23 @@
 
 #include "gfx.h"
 
+const int SCREEN_WIDTH = 640;
+const int SCREEN_HEIGHT = 480;
+
 //============================================================================
-// GfxTexture definitions
+// Texture definitions
 //============================================================================
 
-gfx::Texture::Texture(std::string path)
+gfx::Texture::Texture(std::string path, SDL_Renderer* renderer)
+  : image_width_(0)
+  , image_height_(0)
 {
-  load_image(path);
-  image_width_ = 0;
-  image_height_ = 0;
+  load_image(path, renderer);
 }
 
 gfx::Texture::~Texture()
 {
-  free();
+  decon_assister();
 }
 
 SDL_Texture* gfx::Texture::get_texture()
@@ -36,9 +39,8 @@ int gfx::Texture::get_height()
 }
 
 // bool return value currently unused, use it for error checking one day.
-bool gfx::Texture::load_image(std::string path)
+bool gfx::Texture::load_image(std::string path, SDL_Renderer* renderer)
 {
-  SDL_Renderer* temp_renderer = NULL;
   SDL_Texture* new_texture = NULL;
   SDL_Surface* loaded_surface = IMG_Load(path.c_str());
   if (loaded_surface == NULL)
@@ -49,7 +51,7 @@ bool gfx::Texture::load_image(std::string path)
   {
     SDL_SetColorKey(loaded_surface, SDL_TRUE, SDL_MapRGB(loaded_surface->format, 0xFF, 0xFF, 0xFF));
 
-    new_texture = SDL_CreateTextureFromSurface(temp_renderer, loaded_surface);
+    new_texture = SDL_CreateTextureFromSurface(renderer, loaded_surface);
     if (new_texture == NULL)
     {
       printf("Unable to create texture from %s! SDL_image Error: %s\n", path.c_str(), SDL_GetError());
@@ -68,7 +70,7 @@ bool gfx::Texture::load_image(std::string path)
 }
 
 
-void gfx::Texture::free()
+void gfx::Texture::decon_assister()
 {
   if (image_texture_ != NULL)
   {
@@ -79,24 +81,78 @@ void gfx::Texture::free()
   }
 }
 
-/*
-void GfxTexture::render(int x, int y, SDL_Rect* clip)
-{
-  // Set rendering space
-  SDL_Rect render_quad = { x, y, image_width, image_height };
+//============================================================================
+// Window definitions
+//============================================================================
 
-  // Set clip rendering dimensons
-  if (clip != NULL)
+gfx::Window::Window()
+  : window_(NULL)
+  , width_(0)
+  , height_(0)
+{
+}
+
+gfx::Window::~Window()
+{
+  decon_assister();
+}
+
+bool gfx::Window::init()
+{
+  if (SDL_Init(SDL_INIT_VIDEO) < 0)
   {
-    render_quad.w = clip->w;
-    render_quad.h = clip->h;
+    printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+  }
+  else
+  {
+    window_ = SDL_CreateWindow("Advance(d) Wars", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+
+    if (window_ == NULL)
+    {
+      printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+    }
+    else
+    {
+      width_ = SCREEN_WIDTH;
+      height_ = SCREEN_HEIGHT;
+    }
   }
 
-  // Render to screen
-  SDL_RenderCopy(gfx::renderer, image_texture, clip, &render_quad);
+  return window_ != NULL;
 }
-*/
 
-//============================================================================
-//
-//============================================================================
+SDL_Renderer* gfx::Window::create_renderer()
+{
+  SDL_Renderer* renderer = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED);
+  if (renderer == NULL)
+  {
+    printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
+  }
+  else
+  {
+    SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+
+    int img_flags = IMG_INIT_PNG;
+    if ((IMG_Init(img_flags) & img_flags) != img_flags)
+    {
+      printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+    }
+  }
+
+  return renderer;
+}
+
+int gfx::Window::get_width()
+{
+  return width_;
+}
+
+int gfx::Window::get_height()
+{
+  return height_;
+}
+
+void gfx::Window::decon_assister()
+{
+  SDL_DestroyWindow(window_);
+}

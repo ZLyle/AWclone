@@ -18,7 +18,7 @@ namespace gfx
   {
     public:
       // path, xstart, ystart, width, height, animation framecount
-      Texture(std::string path);
+      Texture(std::string path, SDL_Renderer*);
       ~Texture();
 
       // probably need to implement this soon
@@ -27,13 +27,33 @@ namespace gfx
       int get_height();
 
     private:
-      bool load_image(std::string path);
-      void free();
+      bool load_image(std::string path, SDL_Renderer*);
+      void decon_assister();
 
       SDL_Texture* image_texture_;
       int frame_count_;
       int image_width_;
       int image_height_;
+  };
+
+  class Window
+  {
+    public:
+      Window();
+      ~Window();
+
+      bool init();
+      SDL_Renderer* create_renderer();
+
+      int get_width();
+      int get_height();
+
+    private:
+      void decon_assister();
+
+      SDL_Window* window_;
+      int width_;
+      int height_;
   };
 }
 
