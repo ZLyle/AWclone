@@ -42,6 +42,6 @@ int main()
   SDL_RenderCopy(renderer, test_image, NULL, NULL);
   SDL_RenderPresent(renderer);
   
-  SDL_Delay(2000);
+  SDL_Delay(1000);
   SDL_Quit();
 }

@@ -39,33 +39,19 @@ int gfx::Texture::get_height()
 }
 
 // bool return value currently unused, use it for error checking one day.
+// find out how to fucking hide renderer
 bool gfx::Texture::load_image(std::string path, SDL_Renderer* renderer)
 {
-  SDL_Texture* new_texture = NULL;
-  SDL_Surface* loaded_surface = IMG_Load(path.c_str());
-  if (loaded_surface == NULL)
+  SDL_Texture* image_texture_ = IMG_LoadTexture(renderer, path.c_str());
+  if (image_texture_ == NULL)
   {
-    printf("Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
+    printf("Unable to create texture from %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
   }
   else
   {
-    SDL_SetColorKey(loaded_surface, SDL_TRUE, SDL_MapRGB(loaded_surface->format, 0xFF, 0xFF, 0xFF));
-
-    new_texture = SDL_CreateTextureFromSurface(renderer, loaded_surface);
-    if (new_texture == NULL)
-    {
-      printf("Unable to create texture from %s! SDL_image Error: %s\n", path.c_str(), SDL_GetError());
-    }
-    else
-    {
-      image_width_ = loaded_surface->w;
-      image_height_= loaded_surface->h;
-    }
-
-    SDL_FreeSurface(loaded_surface);
+    SDL_QueryTexture(image_texture_, NULL, NULL, &image_width_, &image_height_);
   }
 
-  image_texture_ = new_texture;
   return image_texture_ != NULL;
 }
 
