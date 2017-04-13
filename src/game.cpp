@@ -25,15 +25,8 @@ void build_test_map()
 {
 }
 
-SDL_Texture* create_test_image()
+void create_window(SDL_Window* window)
 {
-  gfx::Texture test = gfx::Texture("/res/map_tiles/map_tile_sheet.png");
-  return test.get_texture();
-}
-
-SDL_Window* create_window()
-{
-  SDL_Window* window = NULL;
   SDL_Surface* screen_surface = NULL;
 
   if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -70,8 +63,6 @@ SDL_Window* create_window()
       }
     }
   }
-
-  return window;
 }
 
 void destroy_window(SDL_Window* window)
@@ -81,9 +72,12 @@ void destroy_window(SDL_Window* window)
 
 int main()
 {
-  SDL_Window* window = create_window();
+  SDL_Window* window = NULL;
+  create_window(window);
   SDL_UpdateWindowSurface(window); // <--- Segfault right here, some pointer shit, fix asap
-  SDL_Texture* test_image = create_test_image();
+
+  gfx::Texture test_texture = gfx::Texture("/res/map_tiles/map_tile_sheet.png");
+  SDL_Texture* test_image = test_texture.get_texture();
 
   SDL_RenderClear(renderer);
   SDL_RenderCopy(renderer, test_image, NULL, NULL);
