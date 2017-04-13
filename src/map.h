@@ -7,7 +7,9 @@
 #include <vector>
 #include "gfx.h"
 
-// Enumerators are types who's values are specfied by the range they're defined
+namespace map
+{
+// Enumerations are types who's values are specfied by the range they're defined
 // with. This is fairly apparent, as seen here. It's better to use these than
 // some shit like a string when you need to "name" things for comparisons. Also,
 // note that there are a few ways to declare enumerators, this is the most
@@ -16,12 +18,21 @@
 //
 // These also are, by default, associated with a numerical value that iterates
 // as the listing goes on.
-enum TileType { PLAINS, MOUNTAIN, FOREST, RIVER, SEA, REEF, SHOAL,
-                ROAD, BRIDGE, BUILDING };
+//
+// ---> We might be able to make a more concise data structure for the map later
+// by realising that since buildings can only be on a plains, or on a shoal (for
+// docks), those are essentially implied tile types. So we may just store them
+// in the same place. A row from whatever structure we use may look like:
+//    {PLAINS}, {PLAINS}, {FACTORY_RED}, {MOUNTAIN}, etc.
+// rather than having an entire value for buildings and factions that largely
+// goes unused, and takes up (very little) space. This is extremely low priority
+// but still something to consider eventually once everything works.
+  enum TileType { PLAINS, MOUNTAIN, FOREST, RIVER, SEA, REEF, SHOAL,
+                  ROAD, BRIDGE, BUILDING };
 
-enum BuildingType { HQ, CITY, FACTORY, AIRPORT, DOCK };
+  enum BuildingType { HQ, CITY, FACTORY, AIRPORT, DOCK };
 
-enum Faction { NEUTRAL, RED, BLUE, YELLOW, GREEN };
+  enum Faction { NEUTRAL, RED, BLUE, YELLOW, GREEN };
 
 // The Building class should (probably) be simply an object that holds the image
 // of the building, the faction who controls the building, and the actual kind
@@ -40,19 +51,12 @@ enum Faction { NEUTRAL, RED, BLUE, YELLOW, GREEN };
 // can vaguely declare but defer the specification to the sub-classes. Using
 // composition, we just say that the Building has a sub-type object with it's
 // own methods, etc. This is more modular, and technically a better approach for
-// allowing immersive behaviors. It's far preferred in roguelikes etc, where you
+// allowing immergent behaviors. It's far preferred in roguelikes etc, where you
 // might want to grant an object the properties of a crature or something on a
 // whim. HOWEVER, this uses a totally different hierarchy. We'd ditch the
 // building class, probably tile aswell, and just have an entity (does nothing
 // on its own) that simply contains these component objects.
-//
-// Status: Partially Completed
-// Remaining Features:
-//    Building specification
-//    Menu calls (buying units)
-//    Unit creation (flags to define it's state as used for that turn)
-//    Capturing (Capping unit should determine the new Faction)
-//      Some sort of meter will be needed to measure capturing progress
+/*
 class Building {
   public:
     Building(BuildingType, Faction);
@@ -66,8 +70,9 @@ class Building {
   private:
     BuildingType building_type_;
     Faction faction_;
-    GfxTexture building_image_;
+    Gfx::Texture building_image_;
 };
+*/
 
 // The Tile class lacks the functional specification of buildings, but poses a
 // few more graphical challenges. The only data needed will be the defense
@@ -84,59 +89,53 @@ class Building {
 //
 // We need a similar way to determine which tiles have what data. Inheritance vs
 // composition.
-//
-// Status: Partially Completed
-// Remaining Features:
-//    Defense Modifiers
-//    Figure out that image bullshit
-class Tile {
-  public:
-    Tile(const int, const int, TileType);
-    ~Tile();
+  class Tile
+  {
+    public:
+      Tile(const int, const int, /*TileType,*/ gfx::Texture);
+      ~Tile();
 
-// Same deal as for Building, we shouldn't need this. Just remove and replace
-// to change a tile.
-    //void change_tile_type(TileType);
-    void add_building(BuildingType, Faction);
-    void remove_building();
+      //void change_tile_type(TileType);
+      //void add_building(BuildingType, Faction);
+      //void remove_building();
 
-    const int get_x();
-    const int get_y();
-    TileType get_tile_type();
-    GfxTexture get_image();
+      const int get_x();
+      const int get_y();
+      TileType get_tile_type();
+      gfx::Texture get_image();
 
-    void set_tile_type(TileType);
+      //void set_tile_type(TileType);
 
-  private:
-    const int x_;
-    const int y_;
-    TileType tile_type_;
-    GfxTexture tile_image_;
-    // We use a pointer to the object here since we don't always have a building
-    // on a tile. This keeps us from over-allocating memory.
-    Building* contained_building_;
-};
+    private:
+      const int x_;
+      const int y_;
+      TileType tile_type_;
+      gfx::Texture tile_image_;
+      // We use a pointer to the object here since we don't always have a building
+      // on a tile. This keeps us from over-allocating memory.
+      //Building* contained_building_;
+  };
 
 // The class Map is a collection of Tiles, and acts as an interface through
 // which to interact with the Tiles it contains. About all we need to do for it
 // is implement the methods that will interact with the tiles within.
-//
-// Status: Partially Completed
-// Remaining Features:
-//    Tile getting and setting methods
-class Map {
-  public:
-    Map(const int, const int);
-    ~Map();
+  class Map
+  {
+    public:
+      Map(std::string path);
+      Map(const int, const int);
+      ~Map();
 
-    Tile* get_tile_at(int, int);
+      void map_load(std::string path);
+      Tile* get_tile_at(int, int);
 
-  private:
-    // Note that this is a vector of vectors. vector< vector<Tile> >
-    std::vector< std::vector<Tile> > map_vector_;
-    const int width_;
-    const int height_;
-};
+    private:
+      //bool map_free();
+      std::vector< std::vector<Tile*> > map_vector_;
+      const int width_;
+      const int height_;
+  };
+}
 
 #endif //MAP_HEADER
 

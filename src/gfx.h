@@ -9,29 +9,32 @@
 #include <SDL2/SDL_image.h>
 #include <string>
 
-bool gfx_init();
+namespace gfx
+{
 
-bool gfx_close();
+//SDL_Renderer* renderer = NULL;
 
-SDL_Renderer* gfx_renderer;
+  class Texture
+  {
+    public:
+      // path, xstart, ystart, width, height, animation framecount
+      Texture(std::string path);
+      ~Texture();
 
-class GfxTexture {
-  public:
-    GfxTexture();
-    ~GfxTexture();
+      // probably need to implement this soon
+      SDL_Texture* get_texture();
+      int get_width();
+      int get_height();
 
-    bool load_image(std::string path);
-    void free();
+    private:
+      bool load_image(std::string path);
+      void free();
 
-    void render(int x, int y, SDL_Rect* clip = NULL);
-
-    int getWidth();
-    int getHeight();
-
-  private:
-    SDL_Texture* image_texture;
-    int image_width;
-    int image_height;
-};
+      SDL_Texture* image_texture_;
+      int frame_count_;
+      int image_width_;
+      int image_height_;
+  };
+}
 
 #endif //GRAPHICS_HEADER

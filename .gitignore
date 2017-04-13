@@ -1,0 +1,7 @@
+# personal scripts and shit
+**/*.sh
+**/*.swp
+**/*.psd
+**/build/*
+**/bin/debug/*
+**/bin/release/*
