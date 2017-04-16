@@ -21,7 +21,6 @@ namespace gfx
       Texture(std::string path, SDL_Renderer*);
       ~Texture();
 
-      // probably need to implement this soon
       SDL_Texture* get_texture();
       int get_width();
       int get_height();
@@ -31,7 +30,6 @@ namespace gfx
       void decon_assister();
 
       SDL_Texture* image_texture_;
-      int frame_count_;
       int image_width_;
       int image_height_;
   };
@@ -43,6 +41,7 @@ namespace gfx
       ~Window();
 
       bool init();
+      // this probably needs to be encapsulated elsewhere asap
       SDL_Renderer* create_renderer();
 
       int get_width();

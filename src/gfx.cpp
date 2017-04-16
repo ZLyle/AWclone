@@ -42,13 +42,14 @@ int gfx::Texture::get_height()
 // find out how to fucking hide renderer
 bool gfx::Texture::load_image(std::string path, SDL_Renderer* renderer)
 {
-  SDL_Texture* image_texture_ = IMG_LoadTexture(renderer, path.c_str());
+  image_texture_ = IMG_LoadTexture(renderer, path.c_str());
   if (image_texture_ == NULL)
   {
     printf("Unable to create texture from %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
   }
   else
   {
+    printf("SDL_Texture loaded.\n");
     SDL_QueryTexture(image_texture_, NULL, NULL, &image_width_, &image_height_);
   }
 
@@ -91,6 +92,7 @@ bool gfx::Window::init()
   }
   else
   {
+    printf("SDL initialized.\n");
     window_ = SDL_CreateWindow("Advance(d) Wars", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 
     if (window_ == NULL)
@@ -99,6 +101,7 @@ bool gfx::Window::init()
     }
     else
     {
+      printf("SDL window initialized.\n");
       width_ = SCREEN_WIDTH;
       height_ = SCREEN_HEIGHT;
     }
@@ -116,12 +119,17 @@ SDL_Renderer* gfx::Window::create_renderer()
   }
   else
   {
-    SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+    printf("SDL_Renderer created.\n");
+    SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
 
     int img_flags = IMG_INIT_PNG;
     if ((IMG_Init(img_flags) & img_flags) != img_flags)
     {
       printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+    }
+    else
+    {
+      printf("SDL_image initialized.\n");
     }
   }
 
