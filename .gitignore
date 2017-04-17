@@ -2,7 +2,19 @@
 **/*.sh
 **/*.swp
 **/*.psd
+
+# binaries, etc.
+
 **/build/*
-**/bin/debug/*
-**/bin/release/*
+**/x64/*
+**/x86/*
+**/lib/*
+**/include/*
+
+# VS
 **/*.swo
+**/*.sdf
+**/*.VC.opendb
+**/*.vcxproj.filters
+**/*.vcxproj.user
+**/.vs

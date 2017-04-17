@@ -1,6 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <stdio.h>
+#include <cstdio>
 #include "gfx.h"
 #include "map.h"
 
@@ -23,7 +23,7 @@ void build_test_map()
 }
 */
 
-int main()
+int main(int argc, char* argv[])
 {
   SDL_Init(SDL_INIT_VIDEO);
 
