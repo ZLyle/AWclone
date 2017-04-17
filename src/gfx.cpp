@@ -12,7 +12,8 @@ const int SCREEN_HEIGHT = 480;
 //============================================================================
 
 gfx::Texture::Texture(std::string path, SDL_Renderer* renderer)
-  : image_width_(0)
+  : image_texture_(nullptr)
+  , image_width_(0)
   , image_height_(0)
 {
   load_image(path, renderer);
@@ -43,7 +44,7 @@ int gfx::Texture::get_height()
 bool gfx::Texture::load_image(std::string path, SDL_Renderer* renderer)
 {
   image_texture_ = IMG_LoadTexture(renderer, path.c_str());
-  if (image_texture_ == NULL)
+  if (image_texture_ == nullptr)
   {
     printf("Unable to create texture from %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
   }
@@ -53,18 +54,15 @@ bool gfx::Texture::load_image(std::string path, SDL_Renderer* renderer)
     SDL_QueryTexture(image_texture_, NULL, NULL, &image_width_, &image_height_);
   }
 
-  return image_texture_ != NULL;
+  return image_texture_ != nullptr;
 }
 
 
 void gfx::Texture::decon_assister()
 {
-  if (image_texture_ != NULL)
+  if (image_texture_ != nullptr)
   {
     SDL_DestroyTexture(image_texture_);
-    image_texture_ = NULL;
-    image_width_ = 0;
-    image_height_ = 0;
   }
 }
 
