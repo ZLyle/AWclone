@@ -2,12 +2,12 @@
 //
 //
 
-#ifndef GRAPHICS_HEADER
-#define GRAPHICS_HEADER
-
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <string>
+
+#ifndef GRAPHICS_HEADER
+#define GRAPHICS_HEADER
 
 namespace gfx
 {
@@ -19,6 +19,7 @@ namespace gfx
     public:
       // path, xstart, ystart, width, height, animation framecount
       Texture(std::string path, SDL_Renderer*);
+      Texture(SDL_Renderer*, int, int);
       ~Texture();
 
       SDL_Texture* get_texture();
@@ -27,6 +28,7 @@ namespace gfx
 
     private:
       bool load_image(std::string path, SDL_Renderer*);
+      bool create_empty_texture(SDL_Renderer*, int, int);
       void decon_assister();
 
       SDL_Texture* image_texture_;

@@ -19,6 +19,14 @@ gfx::Texture::Texture(std::string path, SDL_Renderer* renderer)
   load_image(path, renderer);
 }
 
+gfx::Texture::Texture(SDL_Renderer* renderer, int width, int height)
+  : image_texture_(nullptr)
+  , image_width_(width)
+  , image_height_(height)
+{
+  create_empty_texture(renderer, width, height);
+}
+
 gfx::Texture::~Texture()
 {
   decon_assister();
@@ -57,6 +65,21 @@ bool gfx::Texture::load_image(std::string path, SDL_Renderer* renderer)
   return image_texture_ != nullptr;
 }
 
+bool gfx::Texture::create_empty_texture(SDL_Renderer* renderer, int width, int height)
+{
+  image_texture_ = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, width, height);
+  if (image_texture_ == nullptr)
+  {
+    printf("Unable to create empty texture! SDL_image Error: %s\n", IMG_GetError());
+  }
+  else
+  {
+    printf("SDL_Texture created.\n");
+    SDL_QueryTexture(image_texture_, NULL, NULL, &image_width_, &image_height_);
+  }
+
+  return image_texture_ != nullptr;
+}
 
 void gfx::Texture::decon_assister()
 {
