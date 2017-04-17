@@ -4,8 +4,8 @@
 
 #include "gfx.h"
 
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
+const int SCREEN_WIDTH = 512;
+const int SCREEN_HEIGHT = 288;
 
 //============================================================================
 // Texture definitions
