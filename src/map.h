@@ -9,6 +9,8 @@
 
 const int TILE_WIDTH = 16;
 const int TILE_HEIGHT = 16;
+const int MAP_ROWS = 9;
+const int MAP_COLUMNS = 16;
 
 namespace map
 {
@@ -38,7 +40,7 @@ namespace map
       Map(std::string path);
       Map(const int, const int);
 
-      //void map_load(std::string path);
+      void map_load();
       void set_tile(int, int, TileType);
       TileType get_tile_type(int, int);
       SDL_Rect get_tile_rect(int, int);
@@ -46,9 +48,8 @@ namespace map
     private:
       // probably won't need this since we use vectors
       //bool map_free();
+      void resize_map(int, int);
       std::vector< std::vector<Tile> > map_vector_;
-      const int width_;
-      const int height_;
   };
 }
 

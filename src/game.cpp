@@ -32,48 +32,12 @@ int main(int argc, char* argv[])
   std::string tile_sheet_path = "../../res/map_tiles/map_tile_sheet.png";
   
   //sprite sheet setup
-  gfx::Texture tile_sprite_sheet_object = gfx::Texture(base_path + tile_sheet_path, renderer);
+  gfx::Texture tile_sprite_sheet_object = gfx::Texture(renderer, base_path + tile_sheet_path);
   SDL_Texture* tile_sprite_sheet_texture = tile_sprite_sheet_object.get_texture();
 
   //test map setup
-  //TODO: Encapsulate this shit
-  int map_array[9][16] =
-  {
-    { 3, 3, 3, 3,  3, 3, 3, 3,  3, 3, 3, 3,  3, 3, 3, 3 },
-    { 3, 4, 5, 3,  3, 3, 4, 4,  4, 5, 4, 5,  3, 3, 4, 5 },
-    { 3, 4, 5, 3,  3, 3, 4, 5,  4, 5, 4, 4,  5, 4, 4, 5 },
-    { 3, 4, 5, 3,  3, 3, 4, 5,  4, 5, 4, 5,  4, 5, 4, 5 },
-    { 3, 4, 5, 3,  3, 3, 4, 5,  4, 5, 4, 5,  4, 5, 4, 5 },
-    { 3, 4, 5, 3,  3, 3, 4, 4,  4, 5, 4, 5,  4, 5, 4, 5 },
-    { 3, 4, 5, 3,  3, 3, 4, 5,  3, 3, 4, 5,  3, 3, 4, 5 },
-    { 3, 4, 4, 4,  4, 5, 4, 5,  3, 3, 4, 5,  3, 3, 4, 5 },
-    { 3, 3, 3, 3,  3, 3, 3, 3,  3, 3, 3, 3,  3, 3, 3, 3 }
-  };
-  map::Map map = map::Map(16, 9);
-  for(int x = 0; x < 16; ++x)
-  {
-    for(int y = 0; y < 9; ++y)
-    {
-      switch(map_array[y][x])
-      {
-        case 1:
-          map.set_tile(x, y, map::SEA);
-          break;
-        case 2:
-          map.set_tile(x, y, map::REEF);
-          break;
-        case 3:
-          map.set_tile(x, y, map::PLAINS);
-          break;
-        case 4:
-          map.set_tile(x, y, map::HILL);
-          break;
-        case 5:
-          map.set_tile(x, y, map::SHADOW);
-          break;
-      }
-    }
-  }
+  map::Map game_map = map::Map(0, 0);
+  game_map.map_load();
 
   //rendering testing
   SDL_RenderClear(renderer);
@@ -85,13 +49,13 @@ int main(int argc, char* argv[])
   dest_rect.w = TILE_WIDTH * DEST_DIM_FACTOR;
   dest_rect.h = TILE_HEIGHT * DEST_DIM_FACTOR;
 
-  for(int x = 0; x < 16; ++x)
+  for(int x = 0; x < MAP_COLUMNS; ++x)
   {
-    for(int y = 0; y < 9; ++y)
+    for(int y = 0; y < MAP_ROWS; ++y)
     {
       dest_rect.x = x * TILE_WIDTH * DEST_DIM_FACTOR;
       dest_rect.y = y * TILE_HEIGHT * DEST_DIM_FACTOR;
-      src_rect = map.get_tile_rect(x, y);
+      src_rect = game_map.get_tile_rect(x, y);
       SDL_RenderCopy(renderer, tile_sprite_sheet_texture, &src_rect, &dest_rect);
     }
   }

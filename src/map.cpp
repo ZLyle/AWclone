@@ -32,12 +32,6 @@ map::TileType map::Tile::get_tile_type()
 void map::Tile::set_src_rect(SDL_Rect new_rect)
 {
   src_rect_ = tile_src_assigner(tile_type_);
-  /*
-  src_rect_.x = new_rect.x;
-  src_rect_.y = new_rect.y;
-  src_rect_.w = new_rect.w;
-  src_rect_.h = new_rect.h;
-  */
 }
 
 SDL_Rect map::Tile::get_src_rect()
@@ -91,17 +85,55 @@ map::Map::Map(std::string path)
 */
 
 map::Map::Map(int width, int height)
-  : width_(width)
-  , height_(height)
 {
-  map_vector_.resize(width);
-  for (auto& inner_vector : map_vector_)
-  {
-    inner_vector.resize(height);
-  }
+  resize_map(width, height);
 }
 
 //map::Map::~Map() { /* Shouldn't need this, but might.*/ } 
+
+void map::Map::map_load()
+{
+
+  int map_array[MAP_ROWS][MAP_COLUMNS] =
+  {
+    { 1, 2, 1, 3,  3, 4, 5, 3,  3, 3, 3, 3,  3, 3, 3, 3 },
+    { 1, 2, 1, 3,  3, 4, 5, 3,  3, 3, 3, 3,  3, 3, 3, 3 },
+    { 1, 2, 1, 3,  3, 4, 5, 3,  3, 3, 3, 3,  3, 3, 3, 3 },
+    { 1, 2, 1, 3,  3, 4, 5, 3,  3, 3, 3, 3,  3, 3, 3, 3 },
+    { 1, 2, 1, 3,  3, 4, 5, 3,  3, 3, 3, 3,  3, 3, 3, 3 },
+    { 1, 2, 1, 3,  3, 4, 5, 3,  3, 3, 3, 3,  3, 3, 3, 3 },
+    { 1, 2, 1, 3,  3, 4, 5, 3,  3, 3, 3, 3,  3, 3, 3, 3 },
+    { 1, 2, 1, 3,  3, 4, 5, 3,  3, 3, 3, 3,  3, 3, 3, 3 },
+    { 1, 2, 1, 3,  3, 4, 5, 3,  3, 3, 3, 3,  3, 3, 3, 3 }
+  };
+
+  resize_map(MAP_COLUMNS, MAP_ROWS);
+
+  for(int x = 0; x < MAP_COLUMNS; ++x)
+  {
+    for(int y = 0; y < MAP_ROWS; ++y)
+    {
+      switch(map_array[y][x])
+      {
+        case 1:
+          set_tile(x, y, map::SEA);
+          break;
+        case 2:
+          set_tile(x, y, map::REEF);
+          break;
+        case 3:
+          set_tile(x, y, map::PLAINS);
+          break;
+        case 4:
+          set_tile(x, y, map::HILL);
+          break;
+        case 5:
+          set_tile(x, y, map::SHADOW);
+          break;
+      }
+    }
+  }
+}
 
 void map::Map::set_tile(int x, int y, TileType tile_type)
 {
@@ -116,6 +148,15 @@ map::TileType map::Map::get_tile_type(int x, int y)
 SDL_Rect map::Map::get_tile_rect(int x, int y)
 {
   return map_vector_.at(x).at(y).get_src_rect();
+}
+
+void map::Map::resize_map(int width, int height)
+{
+  map_vector_.resize(width);
+  for (auto& inner_vector : map_vector_)
+  {
+    inner_vector.resize(height);
+  }
 }
 
 //============================================================================

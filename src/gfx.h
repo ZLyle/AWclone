@@ -18,7 +18,7 @@ namespace gfx
   {
     public:
       // path, xstart, ystart, width, height, animation framecount
-      Texture(std::string path, SDL_Renderer*);
+      Texture(SDL_Renderer*, std::string path);
       Texture(SDL_Renderer*, int, int);
       ~Texture();
 
@@ -27,7 +27,7 @@ namespace gfx
       int get_height();
 
     private:
-      bool load_image(std::string path, SDL_Renderer*);
+      bool load_image(SDL_Renderer*, std::string path);
       bool create_empty_texture(SDL_Renderer*, int, int);
       void decon_assister();
 

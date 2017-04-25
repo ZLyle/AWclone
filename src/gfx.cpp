@@ -11,14 +11,15 @@ const int SCREEN_HEIGHT = 288;
 // Texture definitions
 //============================================================================
 
-gfx::Texture::Texture(std::string path, SDL_Renderer* renderer)
+gfx::Texture::Texture(SDL_Renderer* renderer, std::string path)
   : image_texture_(nullptr)
   , image_width_(0)
   , image_height_(0)
 {
-  load_image(path, renderer);
+  load_image(renderer, path);
 }
 
+//TODO: candidate for removal? I haven't found a case where we need an empty texture
 gfx::Texture::Texture(SDL_Renderer* renderer, int width, int height)
   : image_texture_(nullptr)
   , image_width_(width)
@@ -48,8 +49,8 @@ int gfx::Texture::get_height()
 }
 
 // bool return value currently unused, use it for error checking one day.
-// find out how to fucking hide renderer
-bool gfx::Texture::load_image(std::string path, SDL_Renderer* renderer)
+//TODO: find out how to fucking hide renderer
+bool gfx::Texture::load_image(SDL_Renderer* renderer ,std::string path)
 {
   image_texture_ = IMG_LoadTexture(renderer, path.c_str());
   if (image_texture_ == nullptr)
