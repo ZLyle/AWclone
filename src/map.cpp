@@ -7,21 +7,20 @@
 // Tile definitions
 //============================================================================
 map::Tile::Tile()
-  : src_rect_({0, 0, 0, 0})
-  , tile_type_(UNDEFINED)
+  : tile_type_(UNDEFINED)
 {
 }
 
 map::Tile::Tile(TileType tile_type)
   : tile_type_(tile_type)
 {
-  src_rect_ = tile_src_assigner(tile_type_);
+  render_info_key_ = tile_key_assigner(tile_type_);
 }
 
 void map::Tile::set_tile_type(TileType tile_type)
 {
   tile_type_ = tile_type;
-  set_src_rect(tile_src_assigner(tile_type_));
+  render_info_key_ = tile_key_assigner(tile_type_);
 }
 
 map::TileType map::Tile::get_tile_type()
@@ -29,50 +28,38 @@ map::TileType map::Tile::get_tile_type()
   return tile_type_;
 }
 
-void map::Tile::set_src_rect(SDL_Rect new_rect)
+std::string map::Tile::get_tile_key()
 {
-  src_rect_ = tile_src_assigner(tile_type_);
-}
-
-SDL_Rect map::Tile::get_src_rect()
-{
-  return src_rect_;
+  return render_info_key_;
 }
 
 // Need to think of a better way to do this shit. Probably going to have a
 // blizzard variable that can be 0 or TILE_HEIGHT so if the game is in a
 // blizzard state we can just check, set it accordingly, and have the correct
 // sprite ripped.
-SDL_Rect map::tile_src_assigner(map::TileType tile_type)
+std::string map::tile_key_assigner(map::TileType tile_type)
 {
-  SDL_Rect rect;
+  std::string key_to_return;
+
   switch (tile_type)
   {
     case UNDEFINED:
-      printf("Error, tile_type passed to tile_src_assigner is UNDEFINED!\n");
-      break;
+      printf("Error, tile_type passed to tile_src_assigner is UNDEFINED!\n"); break;
     case SEA: 
-      rect = {              0,                0, TILE_WIDTH, TILE_HEIGHT};
-      break;
+      key_to_return = "sea_1"; break;
     case REEF:
-      rect = {TILE_WIDTH *  4,                0, TILE_WIDTH, TILE_HEIGHT};
-      break;
+      key_to_return = "reef_1"; break;
     case PLAINS:
-      rect = {              0, TILE_HEIGHT *  2, TILE_WIDTH, TILE_HEIGHT};
-      break;
+      key_to_return = "plains"; break;
     case HILL:
-      rect = {TILE_WIDTH *  1, TILE_HEIGHT *  2, TILE_WIDTH, TILE_HEIGHT};
-      break;
+      key_to_return = "hill"; break;
     case SHADOW:
-      rect = {TILE_WIDTH *  2, TILE_HEIGHT *  2, TILE_WIDTH, TILE_HEIGHT};
-      break;
-      //TODO: solve the mountain placement problem. irregular height is an issue.
+      key_to_return = "shadow_plains"; break;
     case MOUNTAIN:
-      rect = {TILE_WIDTH * 15, TILE_HEIGHT *  0, TILE_WIDTH, TILE_HEIGHT + 5};
-      break;
+      key_to_return = "mountain"; break;
   }
 
-  return rect;
+  return key_to_return;
 }
 
 //============================================================================
@@ -86,10 +73,8 @@ map::Map::Map(std::string path)
 
 map::Map::Map(int width, int height)
 {
-  resize_map(width, height);
+  init_map(width, height);
 }
-
-//map::Map::~Map() { /* Shouldn't need this, but might.*/ } 
 
 void map::Map::map_load()
 {
@@ -107,7 +92,7 @@ void map::Map::map_load()
     { 1, 2, 1, 3,  3, 4, 5, 3,  3, 3, 3, 3,  3, 3, 3, 3 }
   };
 
-  resize_map(MAP_COLUMNS, MAP_ROWS);
+  init_map(MAP_COLUMNS, MAP_ROWS);
 
   for(int x = 0; x < MAP_COLUMNS; ++x)
   {
@@ -140,17 +125,17 @@ void map::Map::set_tile(int x, int y, TileType tile_type)
   map_vector_.at(x).at(y).set_tile_type(tile_type);
 }
 
-map::TileType map::Map::get_tile_type(int x, int y)
+map::TileType map::Map::get_tile_type_at(int x, int y)
 {
   return map_vector_.at(x).at(y).get_tile_type();
 }
 
-SDL_Rect map::Map::get_tile_rect(int x, int y)
+std::string map::Map::get_tile_key_at(int x, int y)
 {
-  return map_vector_.at(x).at(y).get_src_rect();
+  return map_vector_.at(x).at(y).get_tile_key();
 }
 
-void map::Map::resize_map(int width, int height)
+void map::Map::init_map(int width, int height)
 {
   map_vector_.resize(width);
   for (auto& inner_vector : map_vector_)

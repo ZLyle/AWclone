@@ -20,10 +20,14 @@ void build_test_map()
 
 int main(int argc, char* argv[])
 {
+  const int MAP_DISPLAY_COLUMNS = 16;
+  const int MAP_DISPLAY_ROWS = 9;
+  const int DEST_DIM_FACTOR = 2;
   //sdl, window, renderer, event handler setup
   SDL_Init(SDL_INIT_VIDEO);
   gfx::Window window;
-  window.init();
+  window.init(TILE_WIDTH  * DEST_DIM_FACTOR * MAP_DISPLAY_COLUMNS,
+              TILE_HEIGHT * DEST_DIM_FACTOR * MAP_DISPLAY_ROWS);
   SDL_Renderer* renderer = window.create_renderer();
   SDL_Event event_handler;
 
@@ -40,9 +44,8 @@ int main(int argc, char* argv[])
   game_map.map_load();
 
   //rendering testing
+  gfx::Image_Map atlas_map = gfx::Image_Map();
   SDL_RenderClear(renderer);
-
-  const int DEST_DIM_FACTOR = 2;
 
   SDL_Rect src_rect;
   SDL_Rect dest_rect;
@@ -55,7 +58,7 @@ int main(int argc, char* argv[])
     {
       dest_rect.x = x * TILE_WIDTH * DEST_DIM_FACTOR;
       dest_rect.y = y * TILE_HEIGHT * DEST_DIM_FACTOR;
-      src_rect = game_map.get_tile_rect(x, y);
+      src_rect = atlas_map.get_src_rect(game_map.get_tile_key_at(x, y));
       SDL_RenderCopy(renderer, tile_sprite_sheet_texture, &src_rect, &dest_rect);
     }
   }

@@ -5,13 +5,16 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <string>
+#include <map>
 
 #ifndef GRAPHICS_HEADER
 #define GRAPHICS_HEADER
 
+const int TILE_WIDTH = 16;
+const int TILE_HEIGHT = 16;
+
 namespace gfx
 {
-
 //SDL_Renderer* renderer = NULL;
 
   class Texture
@@ -42,7 +45,7 @@ namespace gfx
       Window();
       ~Window();
 
-      bool init();
+      bool init(int, int);
       // this probably needs to be encapsulated elsewhere asap
       SDL_Renderer* create_renderer();
 
@@ -55,6 +58,24 @@ namespace gfx
       SDL_Window* window_;
       int width_;
       int height_;
+  };
+
+  typedef struct Render_Info
+  {
+    std::string texture_name_;
+    SDL_Rect rect_;
+  } Render_Info;
+
+  class Image_Map
+  {
+    public:
+      Image_Map();
+      void image_map_builder();
+      std::string get_texture_name(std::string);
+      SDL_Rect get_src_rect(std::string);
+
+    private:
+      std::map<std::string, Render_Info> image_map_;
   };
 }
 

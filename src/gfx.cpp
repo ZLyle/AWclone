@@ -4,9 +4,6 @@
 
 #include "gfx.h"
 
-const int SCREEN_WIDTH = 512;
-const int SCREEN_HEIGHT = 288;
-
 //============================================================================
 // Texture definitions
 //============================================================================
@@ -20,6 +17,7 @@ gfx::Texture::Texture(SDL_Renderer* renderer, std::string path)
 }
 
 //TODO: candidate for removal? I haven't found a case where we need an empty texture
+//      since we don't blit onto a texture and then render it
 gfx::Texture::Texture(SDL_Renderer* renderer, int width, int height)
   : image_texture_(nullptr)
   , image_width_(width)
@@ -106,7 +104,7 @@ gfx::Window::~Window()
   decon_assister();
 }
 
-bool gfx::Window::init()
+bool gfx::Window::init(int SCREEN_WIDTH, int SCREEN_HEIGHT)
 {
   if (SDL_Init(SDL_INIT_VIDEO) < 0)
   {
@@ -172,3 +170,50 @@ void gfx::Window::decon_assister()
 {
   SDL_DestroyWindow(window_);
 }
+
+//============================================================================
+// Atlas functions
+//============================================================================
+
+gfx::Image_Map::Image_Map()
+{
+  image_map_builder();
+}
+
+std::string gfx::Image_Map::get_texture_name(std::string key)
+{
+  return (image_map_.at(key).texture_name_);
+}
+
+SDL_Rect gfx::Image_Map::get_src_rect(std::string key)
+{
+  return image_map_.at(key).rect_;
+}
+
+// surely there's a better way
+void gfx::Image_Map::image_map_builder()
+{
+  image_map_.emplace("sea_1", Render_Info{"tile_sheet",
+      SDL_Rect{               0,                0, TILE_WIDTH, TILE_HEIGHT}});
+
+  image_map_.emplace("reef_1", Render_Info{"tile_sheet",
+      SDL_Rect{ TILE_WIDTH *  4,                0, TILE_WIDTH, TILE_HEIGHT}});
+
+  image_map_.emplace("plains", Render_Info{"tile_sheet",
+      SDL_Rect{               0, TILE_HEIGHT *  2, TILE_WIDTH, TILE_HEIGHT}});
+  
+  image_map_.emplace("hill", Render_Info{"tile_sheet",
+      SDL_Rect{ TILE_WIDTH *  1, TILE_HEIGHT *  2, TILE_WIDTH, TILE_HEIGHT}});
+  
+  image_map_.emplace("shadow_plains", Render_Info{"tile_sheet",
+      SDL_Rect{ TILE_WIDTH *  2, TILE_HEIGHT *  2, TILE_WIDTH, TILE_HEIGHT}});
+
+  //TODO: solve the mountain placement problem. irregular height is an issue.
+  image_map_.emplace("mountain", Render_Info{"tile_sheet",
+      SDL_Rect{ TILE_WIDTH * 15, TILE_HEIGHT *  0, TILE_WIDTH, TILE_HEIGHT + 5}});
+}
+
+
+
+
+

@@ -5,10 +5,9 @@
 #define MAP_HEADER
 
 #include <vector>
+#include <string>
 #include "gfx.h"
 
-const int TILE_WIDTH = 16;
-const int TILE_HEIGHT = 16;
 const int MAP_ROWS = 9;
 const int MAP_COLUMNS = 16;
 
@@ -23,16 +22,17 @@ namespace map
       Tile(TileType);
 
       void set_tile_type(TileType);
+      void set_tile_key(std::string);
       TileType get_tile_type();
-      void set_src_rect(SDL_Rect);
-      SDL_Rect get_src_rect();
+      std::string get_tile_key();
 
     private:
-      SDL_Rect src_rect_;
+      std::string render_info_key_;
+      //SDL_Rect src_rect_;
       TileType tile_type_;
   };
 
-  SDL_Rect tile_src_assigner(TileType);
+  std::string tile_key_assigner(TileType);
 
   class Map
   {
@@ -42,13 +42,11 @@ namespace map
 
       void map_load();
       void set_tile(int, int, TileType);
-      TileType get_tile_type(int, int);
-      SDL_Rect get_tile_rect(int, int);
+      TileType get_tile_type_at(int, int);
+      std::string get_tile_key_at(int, int);
 
     private:
-      // probably won't need this since we use vectors
-      //bool map_free();
-      void resize_map(int, int);
+      void init_map(int, int);
       std::vector< std::vector<Tile> > map_vector_;
   };
 }
