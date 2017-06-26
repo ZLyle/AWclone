@@ -46,6 +46,8 @@ target_sources(game
     "${SRC_DIR}/gfx.cpp"
     "${SRC_DIR}/map.h"
     "${SRC_DIR}/map.cpp"
+    "${SRC_DIR}/util.h"
+    "${SRC_DIR}/util.cpp"
 )
 
 target_link_libraries(game ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY})

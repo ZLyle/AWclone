@@ -63,20 +63,20 @@ std::string map::tile_key_assigner(map::TileType tile_type)
 }
 
 //============================================================================
-// Map definitions
+// Board definitions
 //============================================================================
 /*
-map::Map::Map(std::string path)
+map::Board::Board(std::string path)
 {
 }
 */
 
-map::Map::Map(int width, int height)
+map::Board::Board(int width, int height)
 {
-  init_map(width, height);
+  init_board(width, height);
 }
 
-void map::Map::map_load()
+void map::Board::map_load()
 {
 
   int map_array[MAP_ROWS][MAP_COLUMNS] =
@@ -92,7 +92,7 @@ void map::Map::map_load()
     { 1, 2, 1, 3,  3, 4, 5, 3,  3, 3, 3, 3,  3, 3, 3, 3 }
   };
 
-  init_map(MAP_COLUMNS, MAP_ROWS);
+  init_board(MAP_COLUMNS, MAP_ROWS);
 
   for(int x = 0; x < MAP_COLUMNS; ++x)
   {
@@ -120,25 +120,25 @@ void map::Map::map_load()
   }
 }
 
-void map::Map::set_tile(int x, int y, TileType tile_type)
+void map::Board::set_tile(int x, int y, TileType tile_type)
 {
-  map_vector_.at(x).at(y).set_tile_type(tile_type);
+  board_vector_.at(x).at(y).set_tile_type(tile_type);
 }
 
-map::TileType map::Map::get_tile_type_at(int x, int y)
+map::TileType map::Board::get_tile_type_at(int x, int y)
 {
-  return map_vector_.at(x).at(y).get_tile_type();
+  return board_vector_.at(x).at(y).get_tile_type();
 }
 
-std::string map::Map::get_tile_key_at(int x, int y)
+std::string map::Board::get_tile_key_at(int x, int y)
 {
-  return map_vector_.at(x).at(y).get_tile_key();
+  return board_vector_.at(x).at(y).get_tile_key();
 }
 
-void map::Map::init_map(int width, int height)
+void map::Board::init_board(int width, int height)
 {
-  map_vector_.resize(width);
-  for (auto& inner_vector : map_vector_)
+  board_vector_.resize(width);
+  for (auto& inner_vector : board_vector_)
   {
     inner_vector.resize(height);
   }

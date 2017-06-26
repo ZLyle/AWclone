@@ -15,23 +15,19 @@ const int TILE_HEIGHT = 16;
 
 namespace gfx
 {
-//SDL_Renderer* renderer = NULL;
+  SDL_Renderer* create_renderer(SDL_Window*);
 
-  class Texture
+  class Sprite
   {
     public:
       // path, xstart, ystart, width, height, animation framecount
-      Texture(SDL_Renderer*, std::string path);
-      Texture(SDL_Renderer*, int, int);
-      ~Texture();
+      Sprite(SDL_Renderer*, std::string);
+      ~Sprite();
 
       SDL_Texture* get_texture();
-      int get_width();
-      int get_height();
 
     private:
-      bool load_image(SDL_Renderer*, std::string path);
-      bool create_empty_texture(SDL_Renderer*, int, int);
+      bool load_image(SDL_Renderer*, std::string);
       void decon_assister();
 
       SDL_Texture* image_texture_;
@@ -46,11 +42,7 @@ namespace gfx
       ~Window();
 
       bool init(int, int);
-      // this probably needs to be encapsulated elsewhere asap
-      SDL_Renderer* create_renderer();
-
-      int get_width();
-      int get_height();
+      SDL_Window* get_window();
 
     private:
       void decon_assister();

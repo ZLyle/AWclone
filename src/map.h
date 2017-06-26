@@ -34,11 +34,11 @@ namespace map
 
   std::string tile_key_assigner(TileType);
 
-  class Map
+  class Board
   {
     public:
-      Map(std::string path);
-      Map(const int, const int);
+      Board(std::string path);
+      Board(const int, const int);
 
       void map_load();
       void set_tile(int, int, TileType);
@@ -46,8 +46,8 @@ namespace map
       std::string get_tile_key_at(int, int);
 
     private:
-      void init_map(int, int);
-      std::vector< std::vector<Tile> > map_vector_;
+      void init_board(int, int);
+      std::vector< std::vector<Tile> > board_vector_;
   };
 }
 

@@ -3,20 +3,7 @@
 #include <cstdio>
 #include "gfx.h"
 #include "map.h"
-
-/*
-void render_tile(map::Tile tile_to_render)
-{
-}
-
-void render_map()
-{
-}
-
-void build_test_map()
-{
-}
-*/
+#include "util.h"
 
 int main(int argc, char* argv[])
 {
@@ -28,19 +15,19 @@ int main(int argc, char* argv[])
   gfx::Window window;
   window.init(TILE_WIDTH  * DEST_DIM_FACTOR * MAP_DISPLAY_COLUMNS,
               TILE_HEIGHT * DEST_DIM_FACTOR * MAP_DISPLAY_ROWS);
-  SDL_Renderer* renderer = window.create_renderer();
+  SDL_Renderer* renderer = gfx::create_renderer(window.get_window());
   SDL_Event event_handler;
 
   //file finding
   std::string base_path = SDL_GetBasePath();
   std::string tile_sheet_path = "../../res/map_tiles/map_tile_sheet.png";
-  
+
   //sprite sheet setup
-  gfx::Texture tile_sprite_sheet_object = gfx::Texture(renderer, base_path + tile_sheet_path);
+  gfx::Sprite tile_sprite_sheet_object = gfx::Sprite(renderer, base_path + tile_sheet_path);
   SDL_Texture* tile_sprite_sheet_texture = tile_sprite_sheet_object.get_texture();
 
   //test map setup
-  map::Map game_map = map::Map(0, 0);
+  map::Board game_map = map::Board(0, 0);
   game_map.map_load();
 
   //rendering testing
@@ -62,6 +49,10 @@ int main(int argc, char* argv[])
       SDL_RenderCopy(renderer, tile_sprite_sheet_texture, &src_rect, &dest_rect);
     }
   }
+
+  if(tile_sprite_sheet_texture != NULL) { printf("tile_sprite_sheet_texture exists"); }
+  if(renderer != NULL) { printf("renderer exists"); }
+
   SDL_RenderPresent(renderer);
 
   //pause/delay/exiting/etc
@@ -82,7 +73,7 @@ int main(int argc, char* argv[])
       }
     }
   }
-  
+
   //wrap up
   SDL_DestroyRenderer(renderer);
   SDL_Quit();
