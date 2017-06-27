@@ -156,10 +156,10 @@ SDL_Rect gfx::Image_Map::get_src_rect(std::string key)
 // surely there's a better way
 void gfx::Image_Map::image_map_builder()
 {
-  image_map_.emplace("sea_1", Render_Info{"tile_sheet",
+  image_map_.emplace("sea", Render_Info{"tile_sheet",
       SDL_Rect{               0,                0, TILE_WIDTH, TILE_HEIGHT}});
 
-  image_map_.emplace("reef_1", Render_Info{"tile_sheet",
+  image_map_.emplace("reef", Render_Info{"tile_sheet",
       SDL_Rect{ TILE_WIDTH *  4,                0, TILE_WIDTH, TILE_HEIGHT}});
 
   image_map_.emplace("plains", Render_Info{"tile_sheet",

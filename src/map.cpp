@@ -1,79 +1,63 @@
 //
 // Map implementations/declarations/etc
 //
+
 #include "map.h"
 
 //============================================================================
 // Tile definitions
 //============================================================================
-map::Tile::Tile()
-  : tile_type_(UNDEFINED)
+
+map::Tile::Tile(std::string key)
+  : tile_key_(key)
 {
 }
 
-map::Tile::Tile(TileType tile_type)
-  : tile_type_(tile_type)
+std::string map::Tile::get_tile_key() const
 {
-  render_info_key_ = tile_key_assigner(tile_type_);
-}
-
-void map::Tile::set_tile_type(TileType tile_type)
-{
-  tile_type_ = tile_type;
-  render_info_key_ = tile_key_assigner(tile_type_);
-}
-
-map::TileType map::Tile::get_tile_type()
-{
-  return tile_type_;
-}
-
-std::string map::Tile::get_tile_key()
-{
-  return render_info_key_;
-}
-
-// Need to think of a better way to do this shit. Probably going to have a
-// blizzard variable that can be 0 or TILE_HEIGHT so if the game is in a
-// blizzard state we can just check, set it accordingly, and have the correct
-// sprite ripped.
-std::string map::tile_key_assigner(map::TileType tile_type)
-{
-  std::string key_to_return;
-
-  switch (tile_type)
-  {
-    case UNDEFINED:
-      printf("Error, tile_type passed to tile_src_assigner is UNDEFINED!\n"); break;
-    case SEA: 
-      key_to_return = "sea_1"; break;
-    case REEF:
-      key_to_return = "reef_1"; break;
-    case PLAINS:
-      key_to_return = "plains"; break;
-    case HILL:
-      key_to_return = "hill"; break;
-    case SHADOW:
-      key_to_return = "shadow_plains"; break;
-    case MOUNTAIN:
-      key_to_return = "mountain"; break;
-  }
-
-  return key_to_return;
+  return tile_key_;
 }
 
 //============================================================================
 // Board definitions
 //============================================================================
-/*
-map::Board::Board(std::string path)
+map::Board::Board()
 {
+  init_board(0, 0);
+  init_tile_collection();
+  map_load();
 }
-*/
 
-map::Board::Board(int width, int height)
+map::Tile& map::Board::get_tile_at(int x, int y) const
 {
-  init_board(width, height);
+  return *board_vector_.at(x).at(y);
+}
+
+void map::Board::set_tile_at(int x, int y, TileType tile_type)
+{
+  board_vector_.at(x).at(y) = &tile_collection_.at(tile_type);
+}
+
+void map::Board::init_board(int width, int height)
+{
+  board_vector_.resize(width);
+  for (auto& inner_vector : board_vector_)
+  {
+    inner_vector.resize(height);
+  }
+}
+
+// still using the TileType enum for board logic as of now, since tiles may be
+// functionally identical but only the renderer thinks they're different (like
+// different road directions, etc). Definitely subject to change
+void map::Board::init_tile_collection()
+{
+  tile_collection_.emplace(SEA, Tile("sea"));
+  tile_collection_.emplace(REEF, Tile("reef"));
+  tile_collection_.emplace(PLAINS, Tile("plains"));
+  tile_collection_.emplace(HILL, Tile("hill"));
+  tile_collection_.emplace(SHADOW_PLAINS, Tile("shadow_plains"));
+  tile_collection_.emplace(MOUNTAIN, Tile("mountain"));
 }
 
 void map::Board::map_load()
@@ -101,50 +85,16 @@ void map::Board::map_load()
       switch(map_array[y][x])
       {
         case 1:
-          set_tile(x, y, map::SEA);
-          break;
+          set_tile_at(x, y, SEA); break;
         case 2:
-          set_tile(x, y, map::REEF);
-          break;
+          set_tile_at(x, y, REEF); break;
         case 3:
-          set_tile(x, y, map::PLAINS);
-          break;
+          set_tile_at(x, y, PLAINS); break;
         case 4:
-          set_tile(x, y, map::HILL);
-          break;
+          set_tile_at(x, y, HILL); break;
         case 5:
-          set_tile(x, y, map::SHADOW);
-          break;
+          set_tile_at(x, y, SHADOW_PLAINS); break;
       }
     }
   }
 }
-
-void map::Board::set_tile(int x, int y, TileType tile_type)
-{
-  board_vector_.at(x).at(y).set_tile_type(tile_type);
-}
-
-map::TileType map::Board::get_tile_type_at(int x, int y)
-{
-  return board_vector_.at(x).at(y).get_tile_type();
-}
-
-std::string map::Board::get_tile_key_at(int x, int y)
-{
-  return board_vector_.at(x).at(y).get_tile_key();
-}
-
-void map::Board::init_board(int width, int height)
-{
-  board_vector_.resize(width);
-  for (auto& inner_vector : board_vector_)
-  {
-    inner_vector.resize(height);
-  }
-}
-
-//============================================================================
-//
-//============================================================================
-

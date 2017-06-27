@@ -27,8 +27,7 @@ int main(int argc, char* argv[])
   SDL_Texture* tile_sprite_sheet_texture = tile_sprite_sheet_object.get_texture();
 
   //test map setup
-  map::Board game_map = map::Board(0, 0);
-  game_map.map_load();
+  map::Board game_map = map::Board();
 
   //rendering testing
   gfx::Image_Map atlas_map = gfx::Image_Map();
@@ -45,7 +44,7 @@ int main(int argc, char* argv[])
     {
       dest_rect.x = x * TILE_WIDTH * DEST_DIM_FACTOR;
       dest_rect.y = y * TILE_HEIGHT * DEST_DIM_FACTOR;
-      src_rect = atlas_map.get_src_rect(game_map.get_tile_key_at(x, y));
+      src_rect = atlas_map.get_src_rect(game_map.get_tile_at(x, y).get_tile_key());
       SDL_RenderCopy(renderer, tile_sprite_sheet_texture, &src_rect, &dest_rect);
     }
   }
