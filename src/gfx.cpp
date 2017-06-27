@@ -5,43 +5,106 @@
 #include "gfx.h"
 
 //============================================================================
+// Init definitions
+//============================================================================
+
+gfx::Init::Init()
+{
+  int sdl_flags = SDL_INIT_VIDEO;
+  int img_flags = IMG_INIT_PNG;
+
+  if (SDL_Init(sdl_flags) < 0)
+  {
+    printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+  }
+
+  if ((IMG_Init(img_flags) & img_flags) != img_flags)
+  {
+    printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+  }
+}
+
+gfx::Init::~Init()
+{
+  IMG_Quit();
+  SDL_Quit();
+}
+
+//============================================================================
+// Window definitions
+//============================================================================
+
+gfx::Window::Window(int width, int height)
+{
+  window_ = SDL_CreateWindow("Advance(d) Wars", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
+
+  if (window_ == NULL)
+  {
+    printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+  }
+}
+
+gfx::Window::~Window()
+{
+  SDL_DestroyWindow(window_);
+}
+
+SDL_Window* gfx::Window::get_window() const
+{
+  return window_;
+}
+
+//============================================================================
 // Renderer definitions
 //============================================================================
 
-SDL_Renderer* gfx::create_renderer(SDL_Window* window)
+gfx::Renderer::Renderer(Window window)
 {
-  SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+  SDL_Renderer* renderer = SDL_CreateRenderer(window.get_window(), -1, SDL_RENDERER_ACCELERATED);
   if (renderer == NULL)
   {
     printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
   }
-  else
-  {
-    printf("SDL_Renderer created.\n");
-    SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
+}
 
-    int img_flags = IMG_INIT_PNG;
-    if ((IMG_Init(img_flags) & img_flags) != img_flags)
-    {
-      printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
-    }
-    else
-    {
-      printf("SDL_image initialized.\n");
-    }
-  }
+gfx::Renderer::~Renderer()
+{
+  SDL_DestroyRenderer(renderer_);
+}
 
-  return renderer;
+SDL_Renderer* gfx::Renderer::get() const
+{
+  return renderer_;
+}
+
+void gfx::Renderer::flip_buffer()
+{
+  SDL_RenderPresent(renderer_);
+}
+
+void gfx::Renderer::clear()
+{
+  SDL_RenderClear(renderer_);
+}
+
+void gfx::Renderer::copy(Sprite sprite, SDL_Rect src_rect, SDL_Rect dest_rect)
+{
+  SDL_RenderCopy(renderer_, sprite.get_texture(), &src_rect, &dest_rect);
+}
+
+void gfx::Renderer::set_draw_color(Uint32 r, Uint32 b, Uint32 g, Uint32 a)
+{
+  SDL_SetRenderDrawColor(renderer_, r, b, g, a);
 }
 
 //============================================================================
-// Texture definitions
+// Sprite definitions
 //============================================================================
 
-gfx::Sprite::Sprite(SDL_Renderer* renderer, std::string path)
-  : image_texture_(nullptr)
-  , image_width_(0)
-  , image_height_(0)
+// useful later probably:
+//SDL_QueryTexture(image_texture_, NULL, NULL, &image_width_, &image_height_);
+
+gfx::Sprite::Sprite(Renderer renderer, std::string path)
 {
   load_image(renderer, path);
 }
@@ -59,68 +122,13 @@ SDL_Texture* gfx::Sprite::get_texture() const
   return image_texture_;
 }
 
-// bool return value currently unused, use it for error checking one day.
-//TODO: find out how to fucking hide renderer
-bool gfx::Sprite::load_image(SDL_Renderer* renderer ,std::string path)
+void gfx::Sprite::load_image(Renderer renderer ,std::string path)
 {
-  image_texture_ = IMG_LoadTexture(renderer, path.c_str());
+  image_texture_ = IMG_LoadTexture(renderer.get(), path.c_str());
   if (image_texture_ == nullptr)
   {
     printf("Unable to create texture from %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
   }
-  else
-  {
-    printf("SDL_Texture loaded.\n");
-    SDL_QueryTexture(image_texture_, NULL, NULL, &image_width_, &image_height_);
-  }
-
-  return image_texture_ != nullptr;
-}
-
-//============================================================================
-// Window definitions
-//============================================================================
-
-gfx::Window::Window(int width, int height)
-  : window_(NULL)
-{
-  init(width, height);
-}
-
-gfx::Window::~Window()
-{
-  SDL_DestroyWindow(window_);
-}
-
-bool gfx::Window::init(int SCREEN_WIDTH, int SCREEN_HEIGHT)
-{
-  if (SDL_Init(SDL_INIT_VIDEO) < 0)
-  {
-    printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
-  }
-  else
-  {
-    printf("SDL initialized.\n");
-    window_ = SDL_CreateWindow("Advance(d) Wars", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-
-    if (window_ == NULL)
-    {
-      printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
-    }
-    else
-    {
-      printf("SDL Window created.\n");
-      width_ = SCREEN_WIDTH;
-      height_ = SCREEN_HEIGHT;
-    }
-  }
-
-  return window_ != NULL;
-}
-
-SDL_Window* gfx::Window::get_window() const
-{
-  return window_;
 }
 
 //============================================================================

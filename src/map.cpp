@@ -41,7 +41,7 @@ void map::Board::set_tile_at(int x, int y, TileType tile_type)
 void map::Board::init_board(int width, int height)
 {
   board_vector_.resize(width);
-  for (auto& inner_vector : board_vector_)
+  for (std::vector<Tile*> &inner_vector : board_vector_)
   {
     inner_vector.resize(height);
   }
