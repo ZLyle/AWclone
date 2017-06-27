@@ -48,10 +48,13 @@ gfx::Sprite::Sprite(SDL_Renderer* renderer, std::string path)
 
 gfx::Sprite::~Sprite()
 {
-  decon_assister();
+  if (image_texture_ != nullptr)
+  {
+    SDL_DestroyTexture(image_texture_);
+  }
 }
 
-SDL_Texture* gfx::Sprite::get_texture()
+SDL_Texture* gfx::Sprite::get_texture() const
 {
   return image_texture_;
 }
@@ -74,28 +77,19 @@ bool gfx::Sprite::load_image(SDL_Renderer* renderer ,std::string path)
   return image_texture_ != nullptr;
 }
 
-void gfx::Sprite::decon_assister()
-{
-  if (image_texture_ != nullptr)
-  {
-    SDL_DestroyTexture(image_texture_);
-  }
-}
-
 //============================================================================
 // Window definitions
 //============================================================================
 
-gfx::Window::Window()
+gfx::Window::Window(int width, int height)
   : window_(NULL)
-  , width_(0)
-  , height_(0)
 {
+  init(width, height);
 }
 
 gfx::Window::~Window()
 {
-  decon_assister();
+  SDL_DestroyWindow(window_);
 }
 
 bool gfx::Window::init(int SCREEN_WIDTH, int SCREEN_HEIGHT)
@@ -115,7 +109,7 @@ bool gfx::Window::init(int SCREEN_WIDTH, int SCREEN_HEIGHT)
     }
     else
     {
-      printf("SDL window initialized.\n");
+      printf("SDL Window created.\n");
       width_ = SCREEN_WIDTH;
       height_ = SCREEN_HEIGHT;
     }
@@ -124,14 +118,9 @@ bool gfx::Window::init(int SCREEN_WIDTH, int SCREEN_HEIGHT)
   return window_ != NULL;
 }
 
-SDL_Window* gfx::Window::get_window()
+SDL_Window* gfx::Window::get_window() const
 {
   return window_;
-}
-
-void gfx::Window::decon_assister()
-{
-  SDL_DestroyWindow(window_);
 }
 
 //============================================================================
@@ -143,12 +132,12 @@ gfx::Image_Map::Image_Map()
   image_map_builder();
 }
 
-std::string gfx::Image_Map::get_texture_name(std::string key)
+std::string gfx::Image_Map::get_texture_name(std::string key) const
 {
   return (image_map_.at(key).texture_name_);
 }
 
-SDL_Rect gfx::Image_Map::get_src_rect(std::string key)
+SDL_Rect gfx::Image_Map::get_src_rect(std::string key) const
 {
   return image_map_.at(key).rect_;
 }

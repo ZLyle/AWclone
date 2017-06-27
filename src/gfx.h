@@ -24,11 +24,10 @@ namespace gfx
       Sprite(SDL_Renderer*, std::string);
       ~Sprite();
 
-      SDL_Texture* get_texture();
+      SDL_Texture* get_texture() const;
 
     private:
       bool load_image(SDL_Renderer*, std::string);
-      void decon_assister();
 
       SDL_Texture* image_texture_;
       int image_width_;
@@ -38,15 +37,13 @@ namespace gfx
   class Window
   {
     public:
-      Window();
+      Window(int, int);
       ~Window();
 
       bool init(int, int);
-      SDL_Window* get_window();
+      SDL_Window* get_window() const;
 
     private:
-      void decon_assister();
-
       SDL_Window* window_;
       int width_;
       int height_;
@@ -54,8 +51,8 @@ namespace gfx
 
   typedef struct Render_Info
   {
-    std::string texture_name_;
-    SDL_Rect rect_;
+    const std::string texture_name_;
+    const SDL_Rect rect_;
   } Render_Info;
 
   class Image_Map
@@ -63,8 +60,8 @@ namespace gfx
     public:
       Image_Map();
       void image_map_builder();
-      std::string get_texture_name(std::string);
-      SDL_Rect get_src_rect(std::string);
+      std::string get_texture_name(std::string) const;
+      SDL_Rect get_src_rect(std::string) const;
 
     private:
       std::map<std::string, Render_Info> image_map_;

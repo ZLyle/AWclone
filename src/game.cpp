@@ -12,9 +12,8 @@ int main(int argc, char* argv[])
   const int DEST_DIM_FACTOR = 2;
   //sdl, window, renderer, event handler setup
   SDL_Init(SDL_INIT_VIDEO);
-  gfx::Window window;
-  window.init(TILE_WIDTH  * DEST_DIM_FACTOR * MAP_DISPLAY_COLUMNS,
-              TILE_HEIGHT * DEST_DIM_FACTOR * MAP_DISPLAY_ROWS);
+  gfx::Window window = gfx::Window(TILE_WIDTH  * DEST_DIM_FACTOR * MAP_DISPLAY_COLUMNS,
+                                   TILE_HEIGHT * DEST_DIM_FACTOR * MAP_DISPLAY_ROWS);
   SDL_Renderer* renderer = gfx::create_renderer(window.get_window());
   SDL_Event event_handler;
 
@@ -48,10 +47,6 @@ int main(int argc, char* argv[])
       SDL_RenderCopy(renderer, tile_sprite_sheet_texture, &src_rect, &dest_rect);
     }
   }
-
-  if(tile_sprite_sheet_texture != NULL) { printf("tile_sprite_sheet_texture exists"); }
-  if(renderer != NULL) { printf("renderer exists"); }
-
   SDL_RenderPresent(renderer);
 
   //pause/delay/exiting/etc
