@@ -48,6 +48,8 @@ target_sources(game
     "${SRC_DIR}/map.cpp"
     "${SRC_DIR}/util.h"
     "${SRC_DIR}/util.cpp"
+    "${SRC_DIR}/component.h"
+    "${SRC_DIR}/component.cpp"
 )
 
 target_link_libraries(game ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY})

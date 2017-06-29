@@ -8,6 +8,7 @@
 #include <string>
 #include <map>
 #include "gfx.h"
+#include "component.h"
 
 const int MAP_ROWS = 9;
 const int MAP_COLUMNS = 16;
@@ -19,12 +20,16 @@ namespace map
   class Tile
   {
     public:
-      Tile(std::string);
+      Tile();
+      Tile(std::string, int, int);
 
       std::string get_tile_key() const;
+      void set_tile_data(int, int, std::string);
 
     private:
       std::string tile_key_;
+      component::State_Data tile_state_;
+      component::Renderable_Sprite_Frame tile_renderable_component_;
   };
 
   class Board
@@ -32,16 +37,14 @@ namespace map
     public:
       Board();
 
-      map::Tile& get_tile_at(int, int) const;
-      void set_tile_at(int, int, TileType);
+      Tile* get_tile_at(int, int);
+      void set_tile_at(int, int, std::string);
 
     private:
       void init_board(int, int);
-      void init_tile_collection();
       void map_load();
 
-      std::map<TileType, Tile> tile_collection_;
-      std::vector< std::vector<Tile*> > board_vector_;
+      std::vector< std::vector<Tile> > board_vector_;
   };
 }
 

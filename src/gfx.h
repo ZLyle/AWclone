@@ -1,11 +1,9 @@
-//
-//
-//
-
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <string>
+#include <queue>
 #include <map>
+#include "component.h"
 
 #ifndef GRAPHICS_HEADER
 #define GRAPHICS_HEADER
@@ -15,13 +13,17 @@ const int TILE_HEIGHT = 16;
 
 namespace gfx
 {
-  class Sprite;
+  typedef struct Render_Task
+  {
+    const component::State_Data* obj_state_;
+    const component::Renderable* to_render_;
+  } Render_Task;
 
-  typedef struct Render_Info
+  typedef struct Texture_Name_And_Source
   {
     const std::string texture_name_;
-    const SDL_Rect rect_;
-  } Render_Info;
+    const SDL_Rect source_;
+  } Texture_Name_And_Source;
 
   class Init
   {
@@ -33,7 +35,7 @@ namespace gfx
   class Window
   {
     public:
-      Window(int, int);
+      Window(const int, const int);
       ~Window();
 
       SDL_Window* get_window() const;
@@ -42,66 +44,55 @@ namespace gfx
       SDL_Window* window_;
   };
 
-  class Renderer
+  class Texture_Manager
   {
     public:
-      Renderer(Window);
-      ~Renderer();
+      Texture_Manager();
 
-      SDL_Renderer* get() const;
+      void load_texture(SDL_Renderer*, std::string, std::string);
 
-      void flip_buffer();
-      void clear();
-      void copy(Sprite, SDL_Rect, SDL_Rect);
-      void set_draw_color(Uint32, Uint32, Uint32, Uint32);
+      SDL_Texture* get_texture(std::string) const;
 
     private:
-      SDL_Renderer* renderer_;
+      std::map<std::string, SDL_Texture*> texture_collection_;
   };
 
-  class Sprite
+  class Texture_Atlas
   {
     public:
-      // path, xstart, ystart, width, height, animation framecount
-      Sprite(Renderer, std::string);
-      ~Sprite();
+      Texture_Atlas();
 
-      SDL_Texture* get_texture() const;
-
-    private:
-      void load_image(Renderer, std::string);
-
-      SDL_Texture* image_texture_;
-      int image_width_;
-      int image_height_;
-  };
-
-  class Image_Map
-  {
-    public:
-      Image_Map();
-
-      std::string get_texture_name(std::string) const;
-      SDL_Rect get_src_rect(std::string) const;
+      const SDL_Rect* get_src_rect(std::string) const;
 
       void image_map_builder();
 
     private:
-      std::map<std::string, Render_Info> image_map_;
+      std::map<std::string, Texture_Name_And_Source> image_map_;
   };
 
-  // needs: renderer, atlas_map, renderable shit
-  class Context
+  class Render_Helper
   {
     public:
-      Context();
-      ~Context();
+      Render_Helper(const Window);
+      ~Render_Helper();
 
-      void get() const;
+      void enqueue_task(const Render_Task);
+      void render_task_queue();
 
-      void prepare();
-      // should make a render() signature for every type of renderable thing?
-      void render();
+      SDL_Renderer* get_renderer() const;
+      SDL_Texture* get_texture(std::string) const;
+      const SDL_Rect* get_src_rect(std::string) const;
+
+    private:
+      SDL_Renderer* create_renderer(const Window);
+      void flip_buffer();
+      void clear();
+      void set_draw_color(Uint32, Uint32, Uint32, Uint32);
+
+      SDL_Renderer* renderer_;
+      Texture_Manager texture_manager_;
+      Texture_Atlas texture_atlas_;
+      std::queue<Render_Task> tasks_to_render_;
   };
 }
 
