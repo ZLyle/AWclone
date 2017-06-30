@@ -12,7 +12,7 @@ namespace component
     public:
       virtual ~Renderable() = 0;
 
-      virtual void render(gfx::Render_Helper*, const data::State_Data*) const = 0;
+      virtual void render(gfx::Render_Helper&, const data::State_Data&) const = 0;
   };
 
   class Renderable_Sprite_Frame : public Renderable
@@ -20,7 +20,7 @@ namespace component
     public:
       ~Renderable_Sprite_Frame();
 
-      void render(gfx::Render_Helper*, const data::State_Data*) const;
+      void render(gfx::Render_Helper&, const data::State_Data&) const;
   };
 }
 

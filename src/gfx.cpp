@@ -181,7 +181,7 @@ namespace gfx
     while(!tasks_to_render_.empty())
     {
       data::Render_Task current_task = tasks_to_render_.front();
-      current_task.to_render_->render(this, current_task.obj_state_);
+      current_task.to_render_->render(*this, *current_task.obj_state_);
       tasks_to_render_.pop();
     }
   }
