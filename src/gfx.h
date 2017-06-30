@@ -1,23 +1,22 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <string>
-#include <queue>
-#include <map>
-#include "component.h"
-
 #ifndef GRAPHICS_HEADER
 #define GRAPHICS_HEADER
 
-const int TILE_WIDTH = 16;
-const int TILE_HEIGHT = 16;
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <cstdio>
+#include <string>
+#include <queue>
+#include <map>
+#include "data_structs.h"
+#include "component.h"
 
 namespace gfx
 {
-  typedef struct Render_Task
-  {
-    const component::State_Data* obj_state_;
-    const component::Renderable* to_render_;
-  } Render_Task;
+  const int TILE_WIDTH = 16;
+  const int TILE_HEIGHT = 16;
+  const int MAP_DISPLAY_COLUMNS = 16;
+  const int MAP_DISPLAY_ROWS = 9;
+  const int DEST_DIM_FACTOR = 2;
 
   typedef struct Texture_Name_And_Source
   {
@@ -63,6 +62,7 @@ namespace gfx
       Texture_Atlas();
 
       const SDL_Rect* get_src_rect(std::string) const;
+      const std::string get_texture_key(std::string) const;
 
       void image_map_builder();
 
@@ -73,26 +73,28 @@ namespace gfx
   class Render_Helper
   {
     public:
-      Render_Helper(const Window);
+      Render_Helper(const Window&);
       ~Render_Helper();
 
-      void enqueue_task(const Render_Task);
-      void render_task_queue();
+      void enqueue_task(const data::Render_Task);
+      void render();
+      void load_texture(std::string, std::string);
 
-      SDL_Renderer* get_renderer() const;
+      SDL_Renderer* get_renderer();
       SDL_Texture* get_texture(std::string) const;
       const SDL_Rect* get_src_rect(std::string) const;
 
     private:
-      SDL_Renderer* create_renderer(const Window);
+      SDL_Renderer* create_renderer(const Window&);
+      void render_task_queue();
       void flip_buffer();
       void clear();
-      void set_draw_color(Uint32, Uint32, Uint32, Uint32);
+      void set_draw_color(Uint8, Uint8, Uint8, Uint8);
 
       SDL_Renderer* renderer_;
       Texture_Manager texture_manager_;
       Texture_Atlas texture_atlas_;
-      std::queue<Render_Task> tasks_to_render_;
+      std::queue<data::Render_Task> tasks_to_render_;
   };
 }
 

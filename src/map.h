@@ -7,14 +7,15 @@
 #include <vector>
 #include <string>
 #include <map>
+#include "data_structs.h"
 #include "gfx.h"
 #include "component.h"
 
-const int MAP_ROWS = 9;
-const int MAP_COLUMNS = 16;
-
 namespace map
 {
+  const int MAP_ROWS = 9;
+  const int MAP_COLUMNS = 16;
+
   enum TileType { UNDEFINED, SEA, REEF, PLAINS, HILL, MOUNTAIN, SHADOW_PLAINS };
 
   class Tile
@@ -23,13 +24,13 @@ namespace map
       Tile();
       Tile(std::string, int, int);
 
-      std::string get_tile_key() const;
-      void set_tile_data(int, int, std::string);
+      const data::State_Data* get_state() const;
+      const component::Renderable_Sprite_Frame* get_renderable_component() const;
+      void set_state(const int, const int, const std::string);
 
     private:
-      std::string tile_key_;
-      component::State_Data tile_state_;
-      component::Renderable_Sprite_Frame tile_renderable_component_;
+      data::State_Data state_;
+      component::Renderable_Sprite_Frame renderable_component_;
   };
 
   class Board
@@ -37,13 +38,17 @@ namespace map
     public:
       Board();
 
-      Tile* get_tile_at(int, int);
-      void set_tile_at(int, int, std::string);
+      int get_column_size() const;
+      int get_row_size() const;
+      const Tile* get_tile_at(int, int) const;
+      void set_tile_at(int, int, const std::string);
 
     private:
       void init_board(int, int);
       void map_load();
 
+      int columns_;
+      int rows_;
       std::vector< std::vector<Tile> > board_vector_;
   };
 }

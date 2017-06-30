@@ -1,31 +1,27 @@
+#ifndef COMPONENT_HEADER
+#define COMPONENT_HEADER
+
 #include <string>
+#include "data_structs.h"
 #include "gfx.h"
 
 namespace component
 {
-  // move later
-  typedef struct State_Data {
-    std::string key_;
-    int x_, y_;
-  } State_Data;
-
   class Renderable
   {
     public:
       virtual ~Renderable() = 0;
 
-      virtual void render(const gfx::Render_Helper*, const State_Data*) = 0;
+      virtual void render(gfx::Render_Helper*, const data::State_Data*) const = 0;
   };
 
-  class Renderable_Sprite_Frame : Renderable
+  class Renderable_Sprite_Frame : public Renderable
   {
     public:
       ~Renderable_Sprite_Frame();
 
-      void render(const gfx::Render_Helper*, const State_Data*);
-
-    private:
-      SDL_Rect source_;
-      SDL_Rect target_;
+      void render(gfx::Render_Helper*, const data::State_Data*) const;
   };
 }
+
+#endif //COMPONENT_HEADER

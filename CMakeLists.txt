@@ -42,6 +42,7 @@ add_executable(game src/game.cpp)
 
 target_sources(game
   PRIVATE
+    "${SRC_DIR}/data_structs.h"
     "${SRC_DIR}/gfx.h"
     "${SRC_DIR}/gfx.cpp"
     "${SRC_DIR}/map.h"

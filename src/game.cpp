@@ -1,20 +1,18 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <cstdio>
-#include "gfx.h"
-#include "map.h"
+#include "data_structs.h"
 #include "util.h"
+#include "gfx.h"
+#include "component.h"
+#include "map.h"
 
 int main(int argc, char* argv[])
 {
-  const int MAP_DISPLAY_COLUMNS = 16;
-  const int MAP_DISPLAY_ROWS = 9;
-  const int DEST_DIM_FACTOR = 2;
-  //sdl, window, renderer, event handler setup
-  //SDL_Init(SDL_INIT_VIDEO);
-  gfx::Window window = gfx::Window(TILE_WIDTH  * DEST_DIM_FACTOR * MAP_DISPLAY_COLUMNS,
-                                   TILE_HEIGHT * DEST_DIM_FACTOR * MAP_DISPLAY_ROWS);
-  gfx::Renderer renderer(window);
+  gfx::Init sdl_initializer;
+  gfx::Window window = gfx::Window(gfx::TILE_WIDTH  * gfx::DEST_DIM_FACTOR * gfx::MAP_DISPLAY_COLUMNS,
+                                   gfx::TILE_HEIGHT * gfx::DEST_DIM_FACTOR * gfx::MAP_DISPLAY_ROWS);
+  gfx::Render_Helper render_helper(window);
   SDL_Event event_handler;
 
   //file finding
@@ -22,31 +20,25 @@ int main(int argc, char* argv[])
   std::string tile_sheet_path = "../../res/map_tiles/map_tile_sheet.png";
 
   //sprite sheet setup
-  gfx::Sprite tile_atlas_sprite = gfx::Sprite(renderer, base_path + tile_sheet_path);
+  render_helper.load_texture("tile_atlas", base_path + tile_sheet_path);
 
   //test map setup
   map::Board game_map = map::Board();
 
   //rendering testing
-  gfx::Image_Map atlas_map = gfx::Image_Map();
-  renderer.clear();
-
-  SDL_Rect src_rect;
-  SDL_Rect dest_rect;
-  dest_rect.w = TILE_WIDTH * DEST_DIM_FACTOR;
-  dest_rect.h = TILE_HEIGHT * DEST_DIM_FACTOR;
-
-  for(int x = 0; x < MAP_COLUMNS; ++x)
+  data::Render_Task task_to_queue;
+  for (int y = 0; y < game_map.get_row_size(); ++y)
   {
-    for(int y = 0; y < MAP_ROWS; ++y)
+    for (int x = 0; x < game_map.get_column_size(); ++x)
     {
-      dest_rect.x = x * TILE_WIDTH * DEST_DIM_FACTOR;
-      dest_rect.y = y * TILE_HEIGHT * DEST_DIM_FACTOR;
-      src_rect = atlas_map.get_src_rect(game_map.get_tile_at(x, y).get_tile_key());
-      renderer.copy(tile_atlas_sprite, src_rect, dest_rect);
+      task_to_queue = (data::Render_Task){game_map.get_tile_at(x, y)->get_state(),
+                                          game_map.get_tile_at(x, y)->get_renderable_component()};
+      //printf(" ");
+      render_helper.enqueue_task(task_to_queue);
     }
+    //printf("\n");
   }
-  renderer.flip_buffer();
+  render_helper.render();
 
   //pause/delay/exiting/etc
   bool quit_flag = false;
