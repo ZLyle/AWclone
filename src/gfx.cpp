@@ -52,11 +52,11 @@ SDL_Texture* Texture_Manager::get_texture(std::string texture_handle) const {
   return texture_collection_.at(texture_handle);
 }
 
-void Texture_Manager::load_texture(SDL_Renderer* renderer,
+void Texture_Manager::load_texture(Renderer_Wrapper& renderer,
                                    std::string texture_handle,
                                    std::string path) {
   if (texture_collection_.find(texture_handle) == texture_collection_.end()) {
-    SDL_Texture* image_texture = IMG_LoadTexture(renderer, path.c_str());
+    SDL_Texture* image_texture = IMG_LoadTexture(renderer.get(), path.c_str());
 
     if (image_texture == nullptr) {
       printf("Unable to create texture from %s! SDL_image Error: %s\n",
@@ -110,33 +110,49 @@ void Texture_Atlas::image_map_builder() {
                                              TILE_WIDTH, TILE_HEIGHT + 5}});
 }
 
+// Renderer_Wrapper
+// manages the lifetime of SDL_Renderer
+//
+Renderer_Wrapper::Renderer_Wrapper(const Window& window)
+    : renderer_(create_renderer(window)) {}
+
+Renderer_Wrapper::~Renderer_Wrapper() { SDL_DestroyRenderer(renderer_); }
+
+SDL_Renderer* Renderer_Wrapper::get() { return renderer_; }
+
+SDL_Renderer* Renderer_Wrapper::create_renderer(const Window& window) {
+  SDL_Renderer* renderer =
+   SDL_CreateRenderer(window.get_window(), -1, SDL_RENDERER_ACCELERATED);
+  if (renderer == NULL) {
+    printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
+  }
+  return renderer;
+}
+
 // Render_Helper
 // should probably split it up more?
 //
-Render_Helper::Render_Helper(const Window& window)
-    : renderer_(create_renderer(window)),
-      texture_manager_(Texture_Manager()),
-      texture_atlas_(Texture_Atlas()) {
-  set_draw_color(0, 0, 0, 255);
+Render_Helper::Render_Helper(const Window& window, Renderer_Wrapper& renderer)
+    : texture_manager_(Texture_Manager()), texture_atlas_(Texture_Atlas()) {
+  set_draw_color(renderer, 0, 0, 0, 255);
 }
 
-Render_Helper::~Render_Helper() { SDL_DestroyRenderer(renderer_); }
+Render_Helper::~Render_Helper() {}
 
-void Render_Helper::load_texture(std::string texture_handle, std::string path) {
-  texture_manager_.load_texture(renderer_, texture_handle, path);
+void Render_Helper::load_texture(Renderer_Wrapper& renderer,
+                                 std::string texture_handle, std::string path) {
+  texture_manager_.load_texture(renderer, texture_handle, path);
 }
 
 void Render_Helper::enqueue_task(const data::Render_Task task_to_enqueue) {
   tasks_to_render_.push(task_to_enqueue);
 }
 
-void Render_Helper::render() {
-  clear();
-  render_task_queue();
-  flip_buffer();
+void Render_Helper::render(Renderer_Wrapper& renderer) {
+  clear(renderer);
+  render_task_queue(renderer);
+  flip_buffer(renderer);
 }
-
-SDL_Renderer* Render_Helper::get_renderer() { return renderer_; }
 
 SDL_Texture* Render_Helper::get_texture(std::string key) const {
   return texture_manager_.get_texture(texture_atlas_.get_texture_key(key));
@@ -146,31 +162,25 @@ const SDL_Rect* Render_Helper::get_src_rect(std::string key) const {
   return texture_atlas_.get_src_rect(key);
 }
 
-SDL_Renderer* Render_Helper::create_renderer(const Window& window) {
-  SDL_Renderer* renderer =
-   SDL_CreateRenderer(window.get_window(), -1, SDL_RENDERER_ACCELERATED);
-
-  if (renderer == NULL) {
-    printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
-  }
-
-  return renderer;
-}
-
-void Render_Helper::render_task_queue() {
+void Render_Helper::render_task_queue(Renderer_Wrapper& renderer) {
   while (!tasks_to_render_.empty()) {
     data::Render_Task current_task = tasks_to_render_.front();
-    current_task.to_render_->render(*this, *current_task.obj_state_);
+    current_task.to_render_->render(renderer, *this, *current_task.obj_state_);
     tasks_to_render_.pop();
   }
 }
 
-void Render_Helper::flip_buffer() { SDL_RenderPresent(renderer_); }
+void Render_Helper::flip_buffer(Renderer_Wrapper& renderer) {
+  SDL_RenderPresent(renderer.get());
+}
 
-void Render_Helper::clear() { SDL_RenderClear(renderer_); }
+void Render_Helper::clear(Renderer_Wrapper& renderer) {
+  SDL_RenderClear(renderer.get());
+}
 
-void Render_Helper::set_draw_color(Uint8 r, Uint8 b, Uint8 g, Uint8 a) {
-  SDL_SetRenderDrawColor(renderer_, r, b, g, a);
+void Render_Helper::set_draw_color(Renderer_Wrapper& renderer, Uint8 r, Uint8 b,
+                                   Uint8 g, Uint8 a) {
+  SDL_SetRenderDrawColor(renderer.get(), r, b, g, a);
 }
 
 }  // namespace gfx

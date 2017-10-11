@@ -10,7 +10,8 @@ Renderable::~Renderable() {}
 //
 Renderable_Sprite_Frame::~Renderable_Sprite_Frame() {}
 
-void Renderable_Sprite_Frame::render(gfx::Render_Helper& render_helper,
+void Renderable_Sprite_Frame::render(gfx::Renderer_Wrapper& renderer,
+                                     gfx::Render_Helper& render_helper,
                                      const data::State_Data& state) const {
   SDL_Rect source_;
   SDL_Rect target_;
@@ -24,7 +25,7 @@ void Renderable_Sprite_Frame::render(gfx::Render_Helper& render_helper,
 
   // printf("copying: (%d, %d) -> (%d, %d)\n", state->x_, state->y_, target_.x,
   // target_.y);
-  SDL_RenderCopy(render_helper.get_renderer(),
+  SDL_RenderCopy(renderer.get(),
                  render_helper.get_texture(state.key_), &source_, &target_);
 }
 

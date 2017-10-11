@@ -5,7 +5,6 @@
 
 namespace component { class Renderable; }
 
-namespace gfx { class Render_Helper; }
 
 namespace data
 {
@@ -13,7 +12,6 @@ namespace data
     std::string key_;
     int x_, y_;
   } State_Data;
-
 
   typedef struct Render_Task
   {

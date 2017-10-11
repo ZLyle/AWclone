@@ -43,7 +43,7 @@ class Texture_Manager {
   public:
   Texture_Manager();
 
-  void load_texture(SDL_Renderer*, std::string, std::string);
+  void load_texture(Renderer_Wrapper&, std::string, std::string);
 
   SDL_Texture* get_texture(std::string) const;
 
@@ -64,27 +64,36 @@ class Texture_Atlas {
   std::map<std::string, Texture_Name_And_Source> image_map_;
 };
 
+class Renderer_Wrapper {
+  public:
+  Renderer_Wrapper(const Window&);
+  ~Renderer_Wrapper();
+
+  SDL_Renderer* get();
+
+  private:
+  SDL_Renderer* create_renderer(const Window&);
+  SDL_Renderer* renderer_;
+};
+
 class Render_Helper {
   public:
-  Render_Helper(const Window&);
+  Render_Helper(const Window&, Renderer_Wrapper&);
   ~Render_Helper();
 
-  void load_texture(std::string, std::string);
+  void load_texture(Renderer_Wrapper&, std::string, std::string);
   void enqueue_task(const data::Render_Task);
-  void render();
+  void render(Renderer_Wrapper&);
 
-  SDL_Renderer* get_renderer();
   SDL_Texture* get_texture(std::string) const;
   const SDL_Rect* get_src_rect(std::string) const;
 
   private:
-  SDL_Renderer* create_renderer(const Window&);
-  void render_task_queue();
-  void flip_buffer();
-  void clear();
-  void set_draw_color(Uint8, Uint8, Uint8, Uint8);
+  void render_task_queue(Renderer_Wrapper&);
+  void flip_buffer(Renderer_Wrapper&);
+  void clear(Renderer_Wrapper&);
+  void set_draw_color(Renderer_Wrapper&, Uint8, Uint8, Uint8, Uint8);
 
-  SDL_Renderer* renderer_;
   Texture_Manager texture_manager_;
   Texture_Atlas texture_atlas_;
   std::queue<data::Render_Task> tasks_to_render_;

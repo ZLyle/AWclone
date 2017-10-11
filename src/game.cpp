@@ -12,7 +12,8 @@ int main(int argc, char* argv[]) {
   gfx::Window window = gfx::Window(
    gfx::TILE_WIDTH * gfx::DEST_DIM_FACTOR * gfx::MAP_DISPLAY_COLUMNS,
    gfx::TILE_HEIGHT * gfx::DEST_DIM_FACTOR * gfx::MAP_DISPLAY_ROWS);
-  gfx::Render_Helper render_helper(window);
+  gfx::Renderer_Wrapper renderer(window);
+  gfx::Render_Helper render_helper(window, renderer);
   SDL_Event event_handler;
 
   // file finding
@@ -20,7 +21,7 @@ int main(int argc, char* argv[]) {
   std::string tile_sheet_path = "../../res/map_tiles/map_tile_sheet.png";
 
   // sprite sheet setup
-  render_helper.load_texture("tile_atlas", base_path + tile_sheet_path);
+  render_helper.load_texture(renderer, "tile_atlas", base_path + tile_sheet_path);
 
   // test map setup
   map::Board game_map = map::Board();
@@ -38,7 +39,7 @@ int main(int argc, char* argv[]) {
     }
     // printf("\n");
   }
-  render_helper.render();
+  render_helper.render(renderer);
 
   // pause/delay/exiting/etc
   bool quit_flag = false;
