@@ -4,6 +4,7 @@
 #include <string>
 
 namespace component { class Renderable; }
+
 namespace gfx { class Render_Helper; }
 
 namespace data
@@ -13,12 +14,12 @@ namespace data
     int x_, y_;
   } State_Data;
 
+
   typedef struct Render_Task
   {
     const State_Data* obj_state_;
     const component::Renderable* to_render_;
   } Render_Task;
 }
-
 
 #endif //DATA_STRUCTS

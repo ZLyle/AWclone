@@ -1,35 +1,29 @@
-//
-//
-//
-
-#include <SDL2/SDL.h>
-
 #ifndef UTILITY_HEADER
 #define UTILITY_HEADER
 
-namespace util
-{
-  class Timer
-  {
-    enum timer_state { STOPPED, STARTED, PAUSED };
-    public:
-      Timer();
+#include <SDL2/SDL.h>
 
-      void start();
-      void stop();
-      void pause();
-      void unpause();
+namespace util {
+class Timer {
+  public:
+  Timer();
 
-      Uint32 get_ticks();
-      bool is_stopped();
-      bool is_started();
-      bool is_paused();
+  void start();
+  void stop();
+  void pause();
+  void unpause();
 
-    private:
-      Uint32 start_ticks_;
-      Uint32 paused_ticks_;
-      timer_state state_;
-  };
-}
+  Uint32 get_ticks();
+  bool is_stopped();
+  bool is_started();
+  bool is_paused();
 
-#endif //UTILITY_HEADER
+  private:
+  enum timer_state { STOPPED, STARTED, PAUSED };
+  Uint32 start_ticks_;
+  Uint32 paused_ticks_;
+  timer_state state_;
+};
+}  // namespace util
+
+#endif  // UTILITY_HEADER
