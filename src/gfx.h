@@ -7,7 +7,6 @@
 #include <map>
 #include <queue>
 #include <string>
-#include "component.h"
 #include "data_structs.h"
 
 namespace gfx {
@@ -39,35 +38,10 @@ class Window {
   SDL_Window* window_;
 };
 
-class Texture_Manager {
+class Renderer {
   public:
-  Texture_Manager();
-
-  void load_texture(Renderer_Wrapper&, std::string, std::string);
-
-  SDL_Texture* get_texture(std::string) const;
-
-  private:
-  std::map<std::string, SDL_Texture*> texture_collection_;
-};
-
-class Texture_Atlas {
-  public:
-  Texture_Atlas();
-
-  const SDL_Rect* get_src_rect(std::string) const;
-  const std::string get_texture_key(std::string) const;
-
-  void image_map_builder();
-
-  private:
-  std::map<std::string, Texture_Name_And_Source> image_map_;
-};
-
-class Renderer_Wrapper {
-  public:
-  Renderer_Wrapper(const Window&);
-  ~Renderer_Wrapper();
+  Renderer(const Window&);
+  ~Renderer();
 
   SDL_Renderer* get();
 
@@ -76,28 +50,35 @@ class Renderer_Wrapper {
   SDL_Renderer* renderer_;
 };
 
-class Render_Helper {
-  public:
-  Render_Helper(const Window&, Renderer_Wrapper&);
-  ~Render_Helper();
-
-  void load_texture(Renderer_Wrapper&, std::string, std::string);
-  void enqueue_task(const data::Render_Task);
-  void render(Renderer_Wrapper&);
-
-  SDL_Texture* get_texture(std::string) const;
-  const SDL_Rect* get_src_rect(std::string) const;
-
+class Texture {
   private:
-  void render_task_queue(Renderer_Wrapper&);
-  void flip_buffer(Renderer_Wrapper&);
-  void clear(Renderer_Wrapper&);
-  void set_draw_color(Renderer_Wrapper&, Uint8, Uint8, Uint8, Uint8);
+  SDL_Texture* texture_;
 
-  Texture_Manager texture_manager_;
-  Texture_Atlas texture_atlas_;
-  std::queue<data::Render_Task> tasks_to_render_;
+  public:
+  Texture(Renderer&, const std::string);
+  Texture(const Texture &) = delete;
+  Texture(Texture&& to_move) noexcept {
+    texture_ = to_move.texture_;
+    to_move.texture_ = nullptr;
+  }
+  friend void swap(Texture& left, Texture& right) {
+    std::swap(left.texture_, right.texture_);
+  }
+  Texture &operator=(Texture right) {
+    swap(*this, right);
+    return *this;
+  }
+  ~Texture();
+
+  SDL_Texture* get() const;
 };
+
+typedef std::map<std::string, Texture> Texture_Map;
+void load_texture_to(Texture_Map&, Renderer&, const std::string, const std::string);
+
+typedef std::map<std::string, Texture_Name_And_Source> Atlas;
+Atlas atlas_builder();
+
 }  // namespace gfx
 
 #endif  // GRAPHICS_HEADER

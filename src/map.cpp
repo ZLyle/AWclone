@@ -5,11 +5,11 @@ namespace map {
 //
 Tile::Tile() : state_({"undefined", 0, 0}), renderable_component_() {}
 
-const data::State_Data* Tile::get_state() const { return &state_; }
+const data::State_Data& Tile::get_state() const { return state_; }
 
-const component::Renderable_Sprite_Frame* Tile::get_renderable_component()
+const component::Renderable_Sprite_Frame& Tile::get_renderable_component()
  const {
-  return &renderable_component_;
+  return renderable_component_;
 }
 
 void Tile::set_state(const int x, const int y, const std::string key) {

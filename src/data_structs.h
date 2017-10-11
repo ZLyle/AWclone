@@ -5,19 +5,18 @@
 
 namespace component { class Renderable; }
 
-
 namespace data
 {
-  typedef struct State_Data {
+    struct State_Data {
     std::string key_;
     int x_, y_;
-  } State_Data;
+  };
 
-  typedef struct Render_Task
+  struct Render_Task
   {
-    const State_Data* obj_state_;
-    const component::Renderable* to_render_;
-  } Render_Task;
+    const State_Data& obj_state_;
+    const component::Renderable& to_render_;
+  };
 }
 
 #endif //DATA_STRUCTS

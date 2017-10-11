@@ -5,6 +5,7 @@
 #include "data_structs.h"
 #include "gfx.h"
 #include "map.h"
+#include "render_helper.h"
 #include "util.h"
 
 int main(int argc, char* argv[]) {
@@ -12,7 +13,7 @@ int main(int argc, char* argv[]) {
   gfx::Window window = gfx::Window(
    gfx::TILE_WIDTH * gfx::DEST_DIM_FACTOR * gfx::MAP_DISPLAY_COLUMNS,
    gfx::TILE_HEIGHT * gfx::DEST_DIM_FACTOR * gfx::MAP_DISPLAY_ROWS);
-  gfx::Renderer_Wrapper renderer(window);
+  gfx::Renderer renderer(window);
   gfx::Render_Helper render_helper(window, renderer);
   SDL_Event event_handler;
 
@@ -21,17 +22,19 @@ int main(int argc, char* argv[]) {
   std::string tile_sheet_path = "../../res/map_tiles/map_tile_sheet.png";
 
   // sprite sheet setup
-  render_helper.load_texture(renderer, "tile_atlas", base_path + tile_sheet_path);
+  gfx::Texture_Map texture_map;
+  gfx::load_texture_to(texture_map, renderer, "tile_atlas",
+                       base_path + tile_sheet_path);
+  gfx::Atlas atlas = gfx::atlas_builder();
 
   // test map setup
   map::Board game_map = map::Board();
 
   // rendering testing
-  data::Render_Task task_to_queue;
 
   for (int y = 0; y < game_map.get_row_size(); ++y) {
     for (int x = 0; x < game_map.get_column_size(); ++x) {
-      task_to_queue = (data::Render_Task){
+      data::Render_Task task_to_queue = data::Render_Task{
        game_map.get_tile_at(x, y)->get_state(),
        game_map.get_tile_at(x, y)->get_renderable_component()};
       // printf(" ");
@@ -39,7 +42,7 @@ int main(int argc, char* argv[]) {
     }
     // printf("\n");
   }
-  render_helper.render(renderer);
+  render_helper.render(renderer, texture_map, atlas);
 
   // pause/delay/exiting/etc
   bool quit_flag = false;

@@ -51,6 +51,7 @@ target_sources(game
     "${SRC_DIR}/util.cpp"
     "${SRC_DIR}/component.h"
     "${SRC_DIR}/component.cpp"
+    "${SRC_DIR}/render_helper.h"
 )
 
 target_link_libraries(game ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY})

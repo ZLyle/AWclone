@@ -6,7 +6,6 @@
 #include <vector>
 #include "component.h"
 #include "data_structs.h"
-#include "gfx.h"
 
 namespace map {
 const int MAP_ROWS = 9;
@@ -18,8 +17,8 @@ class Tile {
   Tile();
   Tile(std::string, int, int);
 
-  const data::State_Data* get_state() const;
-  const component::Renderable_Sprite_Frame* get_renderable_component() const;
+  const data::State_Data& get_state() const;
+  const component::Renderable_Sprite_Frame& get_renderable_component() const;
   void set_state(const int, const int, const std::string);
 
   private:
