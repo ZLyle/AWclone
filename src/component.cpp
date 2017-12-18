@@ -9,9 +9,9 @@ Renderable::~Renderable() {}
 //
 Renderable_Sprite_Frame::~Renderable_Sprite_Frame() {}
 
-void Renderable_Sprite_Frame::render(gfx::Renderer& renderer,
+void Renderable_Sprite_Frame::render(gfx::Renderer&          renderer,
                                      const gfx::Texture_Map& texture_map,
-                                     const gfx::Atlas& atlas,
+                                     const gfx::Atlas&       atlas,
                                      const data::State_Data& state) const {
   SDL_Rect source_;
   SDL_Rect target_;
@@ -27,7 +27,8 @@ void Renderable_Sprite_Frame::render(gfx::Renderer& renderer,
   // target_.y);
   SDL_RenderCopy(renderer.get(),
                  texture_map.at(atlas.at(state.key_).texture_name_).get(),
-                 &source_, &target_);
+                 &source_,
+                 &target_);
 }
 
 }  // namespace component

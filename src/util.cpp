@@ -4,35 +4,35 @@ namespace util {
 // Timer
 //
 Timer::Timer() {
-  start_ticks_ = 0;
+  start_ticks_  = 0;
   paused_ticks_ = 0;
-  state_ = STOPPED;
+  state_        = STOPPED;
 }
 
 void Timer::start() {
-  state_ = STARTED;
-  start_ticks_ = SDL_GetTicks();
+  state_        = STARTED;
+  start_ticks_  = SDL_GetTicks();
   paused_ticks_ = 0;
 }
 
 void Timer::stop() {
-  state_ = STOPPED;
-  start_ticks_ = 0;
+  state_        = STOPPED;
+  start_ticks_  = 0;
   paused_ticks_ = 0;
 }
 
 void Timer::pause() {
   if (state_ == STARTED) {
-    state_ = PAUSED;
+    state_        = PAUSED;
     paused_ticks_ = SDL_GetTicks() - start_ticks_;
-    start_ticks_ = 0;
+    start_ticks_  = 0;
   }
 }
 
 void Timer::unpause() {
   if (state_ == PAUSED) {
-    state_ = PAUSED;
-    start_ticks_ = SDL_GetTicks() - paused_ticks_;
+    state_        = PAUSED;
+    start_ticks_  = SDL_GetTicks() - paused_ticks_;
     paused_ticks_ = 0;
   }
 }

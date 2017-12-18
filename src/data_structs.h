@@ -1,22 +1,20 @@
-#ifndef DATA_STRUCTS
-#define DATA_STRUCTS
+#pragma once
 
 #include <string>
 
-namespace component { class Renderable; }
-
-namespace data
-{
-    struct State_Data {
-    std::string key_;
-    int x_, y_;
-  };
-
-  struct Render_Task
-  {
-    const State_Data& obj_state_;
-    const component::Renderable& to_render_;
-  };
+namespace component {
+class Renderable;
 }
 
-#endif //DATA_STRUCTS
+namespace data {
+struct State_Data {
+  std::string key_;
+  int         x_;
+  int         y_;
+};
+
+struct Render_Task {
+  const State_Data&            obj_state_;
+  const component::Renderable& to_render_;
+};
+}  // namespace data

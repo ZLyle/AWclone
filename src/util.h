@@ -1,11 +1,10 @@
-#ifndef UTILITY_HEADER
-#define UTILITY_HEADER
+#pragma once
 
 #include <SDL2/SDL.h>
 
 namespace util {
 class Timer {
-  public:
+public:
   Timer();
 
   void start();
@@ -14,16 +13,14 @@ class Timer {
   void unpause();
 
   Uint32 get_ticks();
-  bool is_stopped();
-  bool is_started();
-  bool is_paused();
+  bool   is_stopped();
+  bool   is_started();
+  bool   is_paused();
 
-  private:
+private:
   enum timer_state { STOPPED, STARTED, PAUSED };
-  Uint32 start_ticks_;
-  Uint32 paused_ticks_;
+  Uint32      start_ticks_;
+  Uint32      paused_ticks_;
   timer_state state_;
 };
 }  // namespace util
-
-#endif  // UTILITY_HEADER

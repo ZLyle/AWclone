@@ -25,9 +25,12 @@ Init::~Init() {
 // Window
 //
 Window::Window(const int width, const int height) {
-  window_ =
-   SDL_CreateWindow("Advance(d) Wars", SDL_WINDOWPOS_UNDEFINED,
-                    SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
+  window_ = SDL_CreateWindow("Advance(d) Wars",
+                             SDL_WINDOWPOS_UNDEFINED,
+                             SDL_WINDOWPOS_UNDEFINED,
+                             width,
+                             height,
+                             SDL_WINDOW_SHOWN);
 
   if (window_ == NULL) {
     printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
@@ -41,8 +44,7 @@ SDL_Window* Window::get_window() const { return window_; }
 // Renderer
 // manages the lifetime of SDL_Renderer
 //
-Renderer::Renderer(const Window& window)
-    : renderer_(create_renderer(window)) {}
+Renderer::Renderer(const Window& window) : renderer_(create_renderer(window)) {}
 
 Renderer::~Renderer() { SDL_DestroyRenderer(renderer_); }
 
@@ -50,7 +52,7 @@ SDL_Renderer* Renderer::get() { return renderer_; }
 
 SDL_Renderer* Renderer::create_renderer(const Window& window) {
   SDL_Renderer* renderer =
-   SDL_CreateRenderer(window.get_window(), -1, SDL_RENDERER_ACCELERATED);
+      SDL_CreateRenderer(window.get_window(), -1, SDL_RENDERER_ACCELERATED);
   if (renderer == NULL) {
     printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
   }
@@ -64,19 +66,14 @@ Texture::Texture(Renderer& renderer, const std::string path) {
   texture_ = IMG_LoadTexture(renderer.get(), path.c_str());
 }
 
-Texture::~Texture() {
-  SDL_DestroyTexture(texture_);
-}
+Texture::~Texture() { SDL_DestroyTexture(texture_); }
 
-SDL_Texture* Texture::get() const {
-  return texture_;
-}
+SDL_Texture* Texture::get() const { return texture_; }
 
 // load_texture
 //
-// clang-format off
-void load_texture_to(Texture_Map& texture_collection,
-                     Renderer& renderer,
+void load_texture_to(Texture_Map&      texture_collection,
+                     Renderer&         renderer,
                      const std::string texture_handle,
                      const std::string path) {
   if (texture_collection.find(texture_handle) == texture_collection.end()) {
@@ -84,7 +81,8 @@ void load_texture_to(Texture_Map& texture_collection,
 
     if (image_texture.get() == nullptr) {
       printf("Unable to create texture from %s! SDL_image Error: %s\n",
-             path.c_str(), IMG_GetError());
+             path.c_str(),
+             IMG_GetError());
     }
     texture_collection.emplace(texture_handle, std::move(image_texture));
   }
@@ -93,26 +91,27 @@ void load_texture_to(Texture_Map& texture_collection,
 // atlus_builder
 //
 //
+// clang-format off
 std::map<std::string, Texture_Name_And_Source> atlas_builder() {
   std::map<std::string, Texture_Name_And_Source> atlas;
 
-  atlas.emplace( "sea", Texture_Name_And_Source{ "tile_atlas",
+  atlas.emplace("sea"          , Texture_Name_And_Source{ "tile_atlas",
     SDL_Rect{              0,               0, TILE_WIDTH, TILE_HEIGHT}});
 
-  atlas.emplace("reef", Texture_Name_And_Source{ "tile_atlas",
+  atlas.emplace("reef"         , Texture_Name_And_Source{ "tile_atlas",
     SDL_Rect{TILE_WIDTH *  4,               0, TILE_WIDTH, TILE_HEIGHT}});
 
-  atlas.emplace( "plains", Texture_Name_And_Source{ "tile_atlas",
+  atlas.emplace("plains"       , Texture_Name_And_Source{ "tile_atlas",
     SDL_Rect{              0, TILE_HEIGHT * 2, TILE_WIDTH, TILE_HEIGHT}});
 
-  atlas.emplace( "hill", Texture_Name_And_Source{ "tile_atlas",
+  atlas.emplace("hill"         , Texture_Name_And_Source{ "tile_atlas",
     SDL_Rect{TILE_WIDTH *  1, TILE_HEIGHT * 2, TILE_WIDTH, TILE_HEIGHT}});
 
   atlas.emplace("shadow_plains", Texture_Name_And_Source{ "tile_atlas",
     SDL_Rect{TILE_WIDTH *  2, TILE_HEIGHT * 2, TILE_WIDTH, TILE_HEIGHT}});
 
   // TODO: solve the mountain placement problem. irregular height is an issue.
-  atlas.emplace("mountain", Texture_Name_And_Source{ "tile_atlas",
+  atlas.emplace("mountain"     , Texture_Name_And_Source{ "tile_atlas",
     SDL_Rect{TILE_WIDTH * 15, TILE_HEIGHT * 0, TILE_WIDTH, TILE_HEIGHT + 5}});
   return atlas;
 }
