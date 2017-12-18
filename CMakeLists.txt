@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 2.6)
+
 project(adv_wars_clone)
 
 #set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
@@ -9,13 +10,23 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${adv_wars_clone_SOURCE_DIR}/x64)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${adv_wars_clone_SOURCE_DIR}/x64/Debug)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${adv_wars_clone_SOURCE_DIR}/x64/Release)
 
-# SDL2 linking variable
+# SDL2 lookup and inclusion
+message(STATUS "Locating SDL2...")
+find_library(SDL2_LIBRARY SDL2)
+find_library(SDL2_IMAGE_LIBRARY SDL2_image)
+MESSAGE( STATUS "SDL2 lib         : " ${SDL2_LIBRARY})
+MESSAGE( STATUS "SDL2_image lib   : " ${SDL2_IMAGE_LIBRARY})
+
+function(statically_link_target_to_sdl TARGET LINK_SCOPE)
+  target_link_libraries(${TARGET} ${LINK_SCOPE} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY})
+endfunction()
+
 # clang, gcc and msvc settings
 # sets debug/optimization flags per build type
 MESSAGE( STATUS "CMAKE_CXX_COMPILER_ID : " ${CMAKE_CXX_COMPILER_ID})
 if ((${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU") OR (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang"))
   MESSAGE( STATUS "using compiler : " ${CMAKE_CXX_COMPILER_ID})
-  set(CMAKE_CXX_FLAGS "-std=c++14 -Wall -pedantic")
+  set(CMAKE_CXX_FLAGS "-std=c++17 -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-gnu-zero-variadic-macro-arguments")
   set(CMAKE_CXX_FLAGS_DEBUG "-g")
   set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
@@ -26,36 +37,10 @@ elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
   endif()
 endif()
 
-# SDL2 lookup and inclusion
-find_library(SDL2_LIBRARY SDL2)
-find_library(SDL2_IMAGE_LIBRARY SDL2_image)
-MESSAGE( STATUS "sdl2 lib         : " ${SDL2_LIBRARY})
-MESSAGE( STATUS "sdl2_image lib   : " ${SDL2_IMAGE_LIBRARY})
-
 # Header directories
-set(SRC_DIR ${adv_wars_clone_SOURCE_DIR}/src)
-#set(HEADER_FILES ${SRC_DIR}/map.h ${SRC_DIR}/gfx.h)
+add_subdirectory(lib)
+add_subdirectory(game)
 
-include_directories(${SRC_DIR})
-
-add_executable(game src/game.cpp)
-
-target_sources(game
-  PRIVATE
-    "${SRC_DIR}/data_structs.h"
-    "${SRC_DIR}/gfx.h"
-    "${SRC_DIR}/gfx.cpp"
-    "${SRC_DIR}/map.h"
-    "${SRC_DIR}/map.cpp"
-    "${SRC_DIR}/util.h"
-    "${SRC_DIR}/util.cpp"
-    "${SRC_DIR}/component.h"
-    "${SRC_DIR}/component.cpp"
-    "${SRC_DIR}/render_helper.h"
-)
-
-target_link_libraries(game ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY})
-
-install(TARGETS game RUNTIME DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-install(TARGETS game RUNTIME DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG} CONFIGURATIONS Debug)
-install(TARGETS game RUNTIME DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE} CONFIGURATIONS Release)
+#install(TARGETS game RUNTIME DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+#install(TARGETS game RUNTIME DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG} CONFIGURATIONS Debug)
+#install(TARGETS game RUNTIME DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE} CONFIGURATIONS Release)
