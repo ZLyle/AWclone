@@ -8,8 +8,6 @@
 **/build/*
 **/x64/*
 **/x86/*
-**/lib/*
-**/include/*
 
 # VS
 **/*.swo
@@ -19,5 +17,4 @@
 **/*.vcxproj.user
 **/.vs
 
-**/game
 **/run_cmake_debug_ver
