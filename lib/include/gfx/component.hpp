@@ -9,7 +9,7 @@
 namespace component {
 class Renderable {
 public:
-  virtual ~Renderable() = 0;
+  virtual ~Renderable() {}
 
   virtual void update(const data::State_Data&) = 0;
 
@@ -18,7 +18,6 @@ public:
                       const gfx::Atlas&,
                       const data::State_Data&) const = 0;
 };
-Renderable::~Renderable() {};
 
 class Renderable_Sprite_Frame : public Renderable {
 public:
