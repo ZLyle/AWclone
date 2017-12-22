@@ -44,8 +44,8 @@ void load(ecs::tile_manager&       manager,
                             texture_map, "mountain", atlas);
           break;
         case 6:
-          manager.init_tile(x, y, renderer, "shadow_plains",
-                            texture_map, "tile_atlas", atlas);
+          manager.init_tile(x, y, renderer, "tile_atlas",
+                            texture_map, "shadow_plains", atlas);
           break;
       }
     }

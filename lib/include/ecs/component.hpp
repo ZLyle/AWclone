@@ -8,7 +8,7 @@
 namespace ecs {
 
 struct component {
-  entity_id associated_entity_;
+  //entity_id associated_entity_;
 };
 
 //typedef std::shared_ptr<component> component_ptr;

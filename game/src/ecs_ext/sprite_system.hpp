@@ -1,6 +1,8 @@
 #ifndef ECS_EXT_SPRITE_SYSTEM_HPP_
 #define ECS_EXT_SPRITE_SYSTEM_HPP_
 
+#include <cassert>
+
 #include "gfx/sdl_wrapper.hpp"
 #include "gfx/texture_map.hpp"
 #include "gfx/atlas.hpp"
@@ -11,33 +13,35 @@ namespace ecs {
 struct sprite_system {
   static void replace_renderer(sprite_comp&             comp_to_modify,
                                const gfx::renderer_ptr& new_renderer) {
+    assert(new_renderer != nullptr);
     comp_to_modify.renderer_ = new_renderer;
   }
 
   static void replace_texture(sprite_comp&            comp_to_modify,
                               const gfx::texture_ptr& new_texture) {
+    assert(new_texture != nullptr);
     comp_to_modify.texture_ = new_texture;
   }
 
-  static void replace_source(sprite_comp&      comp_to_modify,
-                             std::string       tile_name,
-                             const gfx::atlas& tile_map) {
+  static void replace_source(sprite_comp&       comp_to_modify,
+                             const std::string& tile_name,
+                             const gfx::atlas&  tile_map) {
     comp_to_modify.source_ = tile_map.data_.at(tile_name).source_;
   }
 
-  static void init(sprite_comp&            comp_to_modify,
+  static void init(sprite_comp&             comp_to_modify,
                    const gfx::renderer_ptr& new_renderer,
-                   const std::string        texture_name,
+                   const std::string&       texture_name,
                    const gfx::texture_map&  texture_map,
-                   const std::string        tile_name,
+                   const std::string&       tile_name,
                    const gfx::atlas&        tile_map) {
     replace_renderer(comp_to_modify, new_renderer);
     replace_texture(comp_to_modify, texture_map.get_texture_at(texture_name));
     replace_source(comp_to_modify, tile_name, tile_map);
   }
 
-  static void render(sprite_comp&   comp_to_render,
-                     location_comp& comp_with_target) {
+  static void render(const sprite_comp&   comp_to_render,
+                     const location_comp& comp_with_target) {
     gfx::sdl_rect source, target;
 
     source   = comp_to_render.source_;

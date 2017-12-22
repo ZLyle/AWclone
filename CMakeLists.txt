@@ -37,6 +37,7 @@ elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
   endif()
 endif()
 
+
 add_subdirectory(lib)
 add_subdirectory(game)
-
+add_subdirectory(res)

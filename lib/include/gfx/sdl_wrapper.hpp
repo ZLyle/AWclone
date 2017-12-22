@@ -93,7 +93,7 @@ public:
 
   ~sdl_renderer() { SDL_DestroyRenderer(renderer_); }
 
-  SDL_Renderer* get() { return renderer_; }
+  SDL_Renderer* get() const { return renderer_; }
 
 private:
   SDL_Renderer* create_renderer(const sdl_window& window) {
@@ -110,7 +110,7 @@ private:
 
 class sdl_texture {
 public:
-  sdl_texture(sdl_renderer& renderer, const std::string path) {
+  sdl_texture(const sdl_renderer& renderer, const std::string path) {
     texture_ = IMG_LoadTexture(renderer.get(), path.c_str());
   }
 
@@ -139,21 +139,26 @@ private:
 };
 
 struct render_helper {
-  static void render_copy(sdl_renderer& renderer,
-                          sdl_texture   texture,
-                          sdl_rect      source,
-                          sdl_rect      target) {
+  static void render_copy(const sdl_renderer& renderer,
+                          const sdl_texture   texture,
+                          const sdl_rect      source,
+                          const sdl_rect      target) {
     SDL_RenderCopy(renderer.get(), texture.get(), &source, &target);
   }
 
-  static void flip_buffer(sdl_renderer& renderer) {
+  static void flip_buffer(const sdl_renderer& renderer) {
     SDL_RenderPresent(renderer.get());
   }
 
-  static void clear(sdl_renderer& renderer) { SDL_RenderClear(renderer.get()); }
+  static void clear(const sdl_renderer& renderer) {
+    SDL_RenderClear(renderer.get());
+  }
 
-  static void
-  set_draw_color(sdl_renderer& renderer, Uint8 r, Uint8 b, Uint8 g, Uint8 a) {
+  static void set_draw_color(const sdl_renderer& renderer,
+                             const Uint8         r,
+                             const Uint8         b,
+                             const Uint8         g,
+                             const Uint8         a) {
     SDL_SetRenderDrawColor(renderer.get(), r, b, g, a);
   }
 };

@@ -11,7 +11,7 @@
 
 namespace ecs {
 
-  /*
+/*
 class manager {
   std::set<entity> entities;
   entity_id        last_entity_created;
@@ -22,7 +22,7 @@ class manager {
     return last_entity_created;
   }
 };
-  */
+*/
 
 }  // namespace ecs
 

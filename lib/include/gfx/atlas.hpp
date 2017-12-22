@@ -41,7 +41,6 @@ struct atlas {
   // clang-format on
 };
 
-}
+}  // namespace gfx
 
 #endif  // GFX_ATLAS_HPP_
-

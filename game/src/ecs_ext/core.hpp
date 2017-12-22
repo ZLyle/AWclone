@@ -5,17 +5,9 @@
 
 #include "location_system.hpp"
 
-#include "name_comp.hpp"
-
-#include "name_system.hpp"
-
 #include "sprite_comp.hpp"
 
 #include "sprite_system.hpp"
-
-#include "terrain_comp.hpp"
-
-#include "terrain_system.hpp"
 
 #include "tile.hpp"
 

@@ -10,16 +10,20 @@
 #include "util/timer.hpp"
 
 int main() {
-  gfx::sdl_init   sdl_initializer;
+  gfx::sdl_init sdl_initializer;
+
   gfx::sdl_window window(
       gfx::TILE_WIDTH * gfx::DEST_DIM_FACTOR * gfx::MAP_DISPLAY_COLUMNS,
       gfx::TILE_HEIGHT * gfx::DEST_DIM_FACTOR * gfx::MAP_DISPLAY_ROWS);
-  const gfx::renderer_ptr renderer = std::make_shared<gfx::sdl_renderer>(window);
-  SDL_Event          event_handler;
+
+  gfx::renderer_ptr renderer =
+      std::make_shared<gfx::sdl_renderer>(window);
+
+  SDL_Event event_handler;
 
   // file finding
   std::string base_path       = SDL_GetBasePath();
-  std::string tile_sheet_path = "../../res/map_tiles/map_tile_sheet.png";
+  std::string tile_sheet_path = "res/map_tiles/map_tile_sheet.png";
 
   // sprite sheet setup
   gfx::texture_map texture_map;

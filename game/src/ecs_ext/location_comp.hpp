@@ -1,9 +1,11 @@
 #ifndef ECS_EXT_LOCATION_COMP_HPP_
 #define ECS_EXT_LOCATION_COMP_HPP_
 
+#include "ecs/component.hpp"
+
 namespace ecs {
 
-struct location_comp {
+struct location_comp : public component {
   int x_;
   int y_;
 };
