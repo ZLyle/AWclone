@@ -1,7 +1,6 @@
 # personal scripts and shit
 **/*.swp
 **/*.psd
-**/run_cmake_debug_ver
 **/NOTEPAD
 
 # binaries, etc.
