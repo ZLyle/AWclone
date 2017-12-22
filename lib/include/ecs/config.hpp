@@ -3,7 +3,7 @@
 
 namespace ecs {
 
-typedef unsigned entity_id;
+typedef unsigned long entity_id;
 
 }
 
