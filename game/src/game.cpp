@@ -1,18 +1,20 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <cstdio>
+//#include <memory>
 
 #include "gfx/core.hpp"
-#include "map.hpp"
-#include "util.hpp"
+#include "ecs/core.hpp"
+#include "ecs_ext/core.hpp"
+#include "map/board.hpp"
+#include "util/timer.hpp"
 
 int main() {
-  gfx::Init   sdl_initializer;
-  gfx::Window window = gfx::Window(
+  gfx::sdl_init   sdl_initializer;
+  gfx::sdl_window window(
       gfx::TILE_WIDTH * gfx::DEST_DIM_FACTOR * gfx::MAP_DISPLAY_COLUMNS,
       gfx::TILE_HEIGHT * gfx::DEST_DIM_FACTOR * gfx::MAP_DISPLAY_ROWS);
-  gfx::Renderer      renderer(window);
-  gfx::Render_Helper render_helper(renderer);
+  const gfx::renderer_ptr renderer = std::make_shared<gfx::sdl_renderer>(window);
   SDL_Event          event_handler;
 
   // file finding
@@ -20,16 +22,19 @@ int main() {
   std::string tile_sheet_path = "../../res/map_tiles/map_tile_sheet.png";
 
   // sprite sheet setup
-  gfx::Texture_Map texture_map;
-  gfx::load_texture_to(
-      texture_map, renderer, "tile_atlas", base_path + tile_sheet_path);
-  gfx::Atlas atlas = gfx::atlas_builder();
+  gfx::texture_map texture_map;
+  texture_map.load_texture(renderer, "tile_atlas", base_path + tile_sheet_path);
+
+  gfx::atlas atlas;
 
   // test map setup
-  map::Board game_map = map::Board();
+  ecs::tile_manager game_map = ecs::tile_manager();
+  map::load(game_map, renderer, texture_map, atlas);
 
   // rendering testing
+  game_map.render();
 
+  /*
   for (unsigned y = 0; y < game_map.get_row_size(); ++y) {
     for (unsigned x = 0; x < game_map.get_column_size(); ++x) {
       data::Render_Task task_to_queue = data::Render_Task{
@@ -39,6 +44,7 @@ int main() {
     }
   }
   render_helper.render(renderer, texture_map, atlas);
+  */
 
   // pause/delay/exiting/etc
   bool quit_flag = false;

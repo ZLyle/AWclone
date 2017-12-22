@@ -1,9 +1,12 @@
-#ifndef CORE_HPP_
-#define CORE_HPP_
+#ifndef GFX_CORE_HPP_
+#define GFX_CORE_HPP_
 
-#include "data_structs.hpp"
-#include "component.hpp"
-#include "render_helper.hpp"
-#include "gfx.hpp"
+#include "atlas.hpp"
 
-#endif  // CORE_HPP_
+#include "config.hpp"
+
+#include "sdl_wrapper.hpp"
+
+#include "texture_map.hpp"
+
+#endif  // GFX_CORE_HPP_

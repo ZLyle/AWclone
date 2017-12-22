@@ -1,10 +1,10 @@
 # personal scripts and shit
-**/*.sh
 **/*.swp
 **/*.psd
+**/run_cmake_debug_ver
+**/NOTEPAD
 
 # binaries, etc.
-
 **/build/*
 **/x64/*
 **/x86/*
@@ -17,4 +17,3 @@
 **/*.vcxproj.user
 **/.vs
 
-**/run_cmake_debug_ver

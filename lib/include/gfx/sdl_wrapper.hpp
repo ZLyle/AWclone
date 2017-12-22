@@ -1,0 +1,167 @@
+#ifndef GFX_SDL_WRAPPER_HPP_
+#define GFX_SDL_WRAPPER_HPP_
+
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <string>
+#include <memory>
+
+namespace gfx {
+
+typedef SDL_Rect sdl_rect;
+
+class sdl_init {
+public:
+  sdl_init() {
+    int sdl_flags = SDL_INIT_VIDEO;
+    int img_flags = IMG_INIT_PNG;
+
+    if (SDL_Init(static_cast<Uint32>(sdl_flags)) < 0) {
+      printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+    }
+
+    if ((IMG_Init(img_flags) & img_flags) != img_flags) {
+      printf("SDL_image could not initialize! SDL_image Error: %s\n",
+             IMG_GetError());
+    }
+  }
+
+  ~sdl_init() {
+    IMG_Quit();
+    SDL_Quit();
+  }
+};
+
+class sdl_window {
+public:
+  sdl_window(const int width, const int height) {
+    window_ = SDL_CreateWindow("Advance(d) Wars",
+                               SDL_WINDOWPOS_UNDEFINED,
+                               SDL_WINDOWPOS_UNDEFINED,
+                               width,
+                               height,
+                               SDL_WINDOW_SHOWN);
+
+    if (window_ == nullptr) {
+      printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+    }
+  }
+
+  sdl_window(const sdl_window&) = delete;
+
+  sdl_window(sdl_window&& to_move) noexcept {
+    window_         = to_move.window_;
+    to_move.window_ = nullptr;
+  }
+
+  friend void swap(sdl_window& left, sdl_window& right) {
+    std::swap(left.window_, right.window_);
+  }
+
+  sdl_window& operator=(sdl_window right) {
+    swap(*this, right);
+    return *this;
+  }
+
+  ~sdl_window() { SDL_DestroyWindow(window_); }
+
+  SDL_Window* get_window() const { return window_; }
+
+private:
+  SDL_Window* window_;
+};
+
+class sdl_renderer {
+public:
+  sdl_renderer(const sdl_window& window) : renderer_(create_renderer(window)) {}
+
+  sdl_renderer(const sdl_renderer&) = delete;
+
+  sdl_renderer(sdl_renderer&& to_move) noexcept {
+    renderer_         = to_move.renderer_;
+    to_move.renderer_ = nullptr;
+  }
+
+  friend void swap(sdl_renderer& left, sdl_renderer& right) {
+    std::swap(left.renderer_, right.renderer_);
+  }
+
+  sdl_renderer& operator=(sdl_renderer right) {
+    swap(*this, right);
+    return *this;
+  }
+
+  ~sdl_renderer() { SDL_DestroyRenderer(renderer_); }
+
+  SDL_Renderer* get() { return renderer_; }
+
+private:
+  SDL_Renderer* create_renderer(const sdl_window& window) {
+    SDL_Renderer* renderer =
+        SDL_CreateRenderer(window.get_window(), -1, SDL_RENDERER_ACCELERATED);
+    if (renderer == nullptr) {
+      printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
+    }
+    return renderer;
+  }
+
+  SDL_Renderer* renderer_;
+};
+
+class sdl_texture {
+public:
+  sdl_texture(sdl_renderer& renderer, const std::string path) {
+    texture_ = IMG_LoadTexture(renderer.get(), path.c_str());
+  }
+
+  sdl_texture(const sdl_texture&) = delete;
+
+  sdl_texture(sdl_texture&& to_move) noexcept {
+    texture_         = to_move.texture_;
+    to_move.texture_ = nullptr;
+  }
+
+  friend void swap(sdl_texture& left, sdl_texture& right) {
+    std::swap(left.texture_, right.texture_);
+  }
+
+  sdl_texture& operator=(sdl_texture right) {
+    swap(*this, right);
+    return *this;
+  }
+
+  ~sdl_texture() { SDL_DestroyTexture(texture_); }
+
+  SDL_Texture* get() const { return texture_; }
+
+private:
+  SDL_Texture* texture_;
+};
+
+struct render_helper {
+  static void render_copy(sdl_renderer& renderer,
+                          sdl_texture   texture,
+                          sdl_rect      source,
+                          sdl_rect      target) {
+    SDL_RenderCopy(renderer.get(), texture.get(), &source, &target);
+  }
+
+  static void flip_buffer(sdl_renderer& renderer) {
+    SDL_RenderPresent(renderer.get());
+  }
+
+  static void clear(sdl_renderer& renderer) { SDL_RenderClear(renderer.get()); }
+
+  static void
+  set_draw_color(sdl_renderer& renderer, Uint8 r, Uint8 b, Uint8 g, Uint8 a) {
+    SDL_SetRenderDrawColor(renderer.get(), r, b, g, a);
+  }
+};
+
+typedef std::shared_ptr<sdl_renderer> renderer_ptr;
+
+typedef std::shared_ptr<sdl_texture> texture_ptr;
+
+}  // namespace gfx
+
+#endif  // GFX_SDL_WRAPPER_HPP_
