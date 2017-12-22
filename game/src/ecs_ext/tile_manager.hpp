@@ -6,7 +6,7 @@
 #include "tile.hpp"
 #include "name_system.hpp"
 #include "location_system.hpp"
-#include "texture_system.hpp"
+#include "sprite_system.hpp"
 
 namespace ecs {
 
@@ -45,46 +45,46 @@ struct tile_manager {
                 y);
   }
 
-  void init_texture_at(const int x, const int y,
-                       const std::string        tile_name,
-                       const std::string        texture_name,
-                       const gfx::renderer_ptr& new_renderer,
-                       const gfx::texture_map&  source_map,
-                       const gfx::atlas&        atlas) {
-    ecs::texture_system
+  void init_sprite_at(const int x, const int y,
+                      const gfx::renderer_ptr& new_renderer,
+                      const std::string        texture_name,
+                      const gfx::texture_map&  texture_map,
+                      const std::string        tile_name,
+                      const gfx::atlas&        tile_map) {
+    ecs::sprite_system
        ::init(tile_matrix_
                 .at(static_cast<unsigned>(x))
                 .at(static_cast<unsigned>(y))
-                .texture_,
-              tile_name,
-              texture_name,
+                .sprite_,
               new_renderer,
-              source_map,
-              atlas);
+              texture_name,
+              texture_map,
+              tile_name,
+              tile_map);
   }
 
   void init_tile(const int x, const int y,
-                 const std::string        tile_name,
-                 const std::string        texture_name,
                  const gfx::renderer_ptr& new_renderer,
-                 const gfx::texture_map&  source_map,
-                 const gfx::atlas&        atlas) {
+                 const std::string        texture_name,
+                 const gfx::texture_map&  texture_map,
+                 const std::string        tile_name,
+                 const gfx::atlas&        tile_map) {
     modify_name_at(x, y, tile_name);
     modify_location_at(x, y);
-    init_texture_at(x, y,  tile_name, texture_name,
-                    new_renderer,source_map, atlas);
+    init_sprite_at(x, y, new_renderer, texture_name,
+                   texture_map, tile_name, tile_map);
   }
   // clang-format on
 
   void render() {
     gfx::sdl_renderer& renderer =
-        *(tile_matrix_.at(0).at(0).texture_.renderer_);
+        *(tile_matrix_.at(0).at(0).sprite_.renderer_);
     gfx::render_helper::clear(renderer);
 
     for (auto& outer_vec : tile_matrix_) {
       for (auto& current_tile : outer_vec) {
-        ecs::texture_system::render(current_tile.texture_,
-                                    current_tile.location_);
+        ecs::sprite_system::render(current_tile.sprite_,
+                                   current_tile.location_);
       }
     }
 

@@ -9,13 +9,13 @@
 
 #include "name_system.hpp"
 
+#include "sprite_comp.hpp"
+
+#include "sprite_system.hpp"
+
 #include "terrain_comp.hpp"
 
 #include "terrain_system.hpp"
-
-#include "texture_comp.hpp"
-
-#include "texture_system.hpp"
 
 #include "tile.hpp"
 

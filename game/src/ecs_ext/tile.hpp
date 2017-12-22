@@ -4,13 +4,13 @@
 #include "ecs/entity.hpp"
 #include "name_comp.hpp"
 #include "location_comp.hpp"
-#include "texture_comp.hpp"
+#include "sprite_comp.hpp"
 
 namespace ecs {
 
 struct tile : public entity {
   location_comp location_;
-  texture_comp  texture_;
+  sprite_comp   sprite_;
   name_comp     name_;
 };
 

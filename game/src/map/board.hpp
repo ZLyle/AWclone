@@ -9,6 +9,9 @@
 
 namespace map {
 
+const int MAP_ROWS    = 9;
+const int MAP_COLUMNS = 16;
+
 void load(ecs::tile_manager&,
           const gfx::renderer_ptr&,
           const gfx::texture_map&,

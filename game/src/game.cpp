@@ -34,18 +34,6 @@ int main() {
   // rendering testing
   game_map.render();
 
-  /*
-  for (unsigned y = 0; y < game_map.get_row_size(); ++y) {
-    for (unsigned x = 0; x < game_map.get_column_size(); ++x) {
-      data::Render_Task task_to_queue = data::Render_Task{
-          game_map.get_tile_at(x, y)->get_state(),
-          game_map.get_tile_at(x, y)->get_renderable_component()};
-      render_helper.enqueue_task(task_to_queue);
-    }
-  }
-  render_helper.render(renderer, texture_map, atlas);
-  */
-
   // pause/delay/exiting/etc
   bool quit_flag = false;
   while (!quit_flag) {

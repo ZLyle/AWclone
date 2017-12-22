@@ -1,5 +1,5 @@
-#ifndef ECS_EXT_TEXTURE_COMP_HPP_
-#define ECS_EXT_TEXTURE_COMP_HPP_
+#ifndef ECS_EXT_SPRITE_COMP_HPP_
+#define ECS_EXT_SPRITE_COMP_HPP_
 
 #include <memory>
 #include <string>
@@ -8,7 +8,7 @@
 
 namespace ecs {
 
-struct texture_comp {
+struct sprite_comp {
   gfx::renderer_ptr renderer_;
   gfx::texture_ptr  texture_;
   gfx::sdl_rect     source_;
@@ -16,4 +16,4 @@ struct texture_comp {
 
 }  // namespace ecs
 
-#endif  // ECS_EXT_TEXTURE_COMP_HPP_
+#endif  // ECS_EXT_SPRITE_COMP_HPP_
