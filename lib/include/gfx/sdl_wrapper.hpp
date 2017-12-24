@@ -140,9 +140,9 @@ private:
 
 struct render_helper {
   static void render_copy(const sdl_renderer& renderer,
-                          const sdl_texture   texture,
-                          const sdl_rect      source,
-                          const sdl_rect      target) {
+                          const sdl_texture&  texture,
+                          const sdl_rect&     source,
+                          const sdl_rect&     target) {
     SDL_RenderCopy(renderer.get(), texture.get(), &source, &target);
   }
 

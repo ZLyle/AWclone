@@ -1,12 +1,13 @@
-#ifndef UTIL_HPP_
-#define UTIL_HPP_
+#ifndef UTIL_TIMER_HPP_
+#define UTIL_TIMER_HPP_
 
 #include <SDL2/SDL.h>
 
 namespace util {
-class Timer {
+
+class timer {
 public:
-  Timer() {
+  timer() {
     start_ticks_  = 0;
     paused_ticks_ = 0;
     state_        = STOPPED;
@@ -66,6 +67,7 @@ private:
   Uint32      paused_ticks_;
   timer_state state_;
 };
+
 }  // namespace util
 
-#endif  // UTIL_HPP_
+#endif  // UTIL_TIMER_HPP_

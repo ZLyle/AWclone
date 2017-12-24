@@ -26,7 +26,10 @@ struct sprite_system {
   static void replace_source(sprite_comp&       comp_to_modify,
                              const std::string& tile_name,
                              const gfx::atlas&  tile_map) {
-    comp_to_modify.source_ = tile_map.data_.at(tile_name).source_;
+    comp_to_modify.total_frames_ = tile_map.data_.at(tile_name).total_frames_;
+    comp_to_modify.hold_time_    = tile_map.data_.at(tile_name).hold_time_;
+    comp_to_modify.frames_held_  = 0;
+    comp_to_modify.source_       = tile_map.data_.at(tile_name).source_;
   }
 
   static void init(sprite_comp&             comp_to_modify,
@@ -40,20 +43,37 @@ struct sprite_system {
     replace_source(comp_to_modify, tile_name, tile_map);
   }
 
-  static void render(const sprite_comp&   comp_to_render,
-                     const location_comp& comp_with_target) {
+  static void update_animations(sprite_comp& comp_to_modify) {
+    if (comp_to_modify.hold_time_ != 0) {
+      if (comp_to_modify.frames_held_ == comp_to_modify.hold_time_) {
+        ++comp_to_modify.current_frame_;
+        comp_to_modify.current_frame_ %= comp_to_modify.total_frames_ + 1;
+        comp_to_modify.frames_held_ = 0;
+      }
+      ++comp_to_modify.frames_held_;
+    }
+  }
+
+  static void update_render(const sprite_comp&   comp_to_render,
+                            const location_comp& comp_with_target) {
     gfx::sdl_rect source, target;
 
-    source   = comp_to_render.source_;
+    source   = comp_to_render.source_.at(comp_to_render.current_frame_);
     target.x = (comp_with_target.x_) * gfx::DEST_DIM_FACTOR * gfx::TILE_WIDTH;
     target.y = (comp_with_target.y_) * gfx::DEST_DIM_FACTOR * gfx::TILE_HEIGHT;
     target.w = gfx::DEST_DIM_FACTOR * gfx::TILE_WIDTH;
     target.h = gfx::DEST_DIM_FACTOR * gfx::TILE_HEIGHT;
 
-    SDL_RenderCopy((*comp_to_render.renderer_).get(),
-                   (*comp_to_render.texture_).get(),
-                   &source,
-                   &target);
+    gfx::render_helper::render_copy((*comp_to_render.renderer_.get()),
+                                    (*comp_to_render.texture_.get()),
+                                    source,
+                                    target);
+  }
+
+  static void update(sprite_comp&         comp_to_render,
+                     const location_comp& comp_with_target) {
+    update_animations(comp_to_render);
+    update_render(comp_to_render, comp_with_target);
   }
 };
 

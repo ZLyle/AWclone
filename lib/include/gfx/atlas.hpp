@@ -3,6 +3,7 @@
 
 #include <string>
 #include <map>
+#include <vector>
 
 #include "sdl_wrapper.hpp"
 #include "config.hpp"
@@ -10,33 +11,66 @@
 namespace gfx {
 
 struct atlas {
-  struct texture_name_and_source {
-    const std::string texture_name_;
-    const sdl_rect    source_;
+  struct sprite_data {
+    const std::string           texture_name_;
+    const unsigned              total_frames_;
+    const unsigned              hold_time_;
+    const std::vector<sdl_rect> source_;
   };
 
-  std::map<std::string, texture_name_and_source> data_;
+  std::map<std::string, sprite_data> data_;
 
   // clang-format off
   atlas() {
-    data_.emplace("sea"          , texture_name_and_source{ "tile_atlas",
-      sdl_rect{              0,               0, TILE_WIDTH, TILE_HEIGHT}});
+    unsigned access_offset = 1;
+    int mountain_height = TILE_HEIGHT + 5;
 
-    data_.emplace("reef"         , texture_name_and_source{ "tile_atlas",
-      sdl_rect{TILE_WIDTH *  4,               0, TILE_WIDTH, TILE_HEIGHT}});
+    data_.emplace("sea"          , sprite_data{ "tile_atlas",
+      6 - access_offset, TIME_STEP * 2,
+      std::vector{
+      sdl_rect{TILE_WIDTH *  0, TILE_HEIGHT * 0, TILE_WIDTH, TILE_HEIGHT},
+      sdl_rect{TILE_WIDTH *  1, TILE_HEIGHT * 0, TILE_WIDTH, TILE_HEIGHT},
+      sdl_rect{TILE_WIDTH *  2, TILE_HEIGHT * 0, TILE_WIDTH, TILE_HEIGHT},
+      sdl_rect{TILE_WIDTH *  3, TILE_HEIGHT * 0, TILE_WIDTH, TILE_HEIGHT},
+      sdl_rect{TILE_WIDTH *  2, TILE_HEIGHT * 0, TILE_WIDTH, TILE_HEIGHT},
+      sdl_rect{TILE_WIDTH *  1, TILE_HEIGHT * 0, TILE_WIDTH, TILE_HEIGHT}
+      }});
 
-    data_.emplace("plains"       , texture_name_and_source{ "tile_atlas",
-      sdl_rect{              0, TILE_HEIGHT * 2, TILE_WIDTH, TILE_HEIGHT}});
+    data_.emplace("reef"         , sprite_data{ "tile_atlas",
+      6 - access_offset, TIME_STEP * 2,
+      std::vector{
+      sdl_rect{TILE_WIDTH *  4, TILE_HEIGHT * 0, TILE_WIDTH, TILE_HEIGHT},
+      sdl_rect{TILE_WIDTH *  5, TILE_HEIGHT * 0, TILE_WIDTH, TILE_HEIGHT},
+      sdl_rect{TILE_WIDTH *  6, TILE_HEIGHT * 0, TILE_WIDTH, TILE_HEIGHT},
+      sdl_rect{TILE_WIDTH *  7, TILE_HEIGHT * 0, TILE_WIDTH, TILE_HEIGHT},
+      sdl_rect{TILE_WIDTH *  6, TILE_HEIGHT * 0, TILE_WIDTH, TILE_HEIGHT},
+      sdl_rect{TILE_WIDTH *  5, TILE_HEIGHT * 0, TILE_WIDTH, TILE_HEIGHT}
+      }});
 
-    data_.emplace("hill"         , texture_name_and_source{ "tile_atlas",
-      sdl_rect{TILE_WIDTH *  1, TILE_HEIGHT * 2, TILE_WIDTH, TILE_HEIGHT}});
+    data_.emplace("plains"       , sprite_data{ "tile_atlas",
+      1 - access_offset, 0,
+      std::vector{
+      sdl_rect{TILE_WIDTH *  0, TILE_HEIGHT * 2, TILE_WIDTH, TILE_HEIGHT}
+      }});
 
-    data_.emplace("shadow_plains", texture_name_and_source{ "tile_atlas",
-      sdl_rect{TILE_WIDTH *  2, TILE_HEIGHT * 2, TILE_WIDTH, TILE_HEIGHT}});
+    data_.emplace("hill"         , sprite_data{ "tile_atlas",
+      1 - access_offset, 0,
+      std::vector{
+      sdl_rect{TILE_WIDTH *  1, TILE_HEIGHT * 2, TILE_WIDTH, TILE_HEIGHT}
+      }});
+
+    data_.emplace("shadow_plains", sprite_data{ "tile_atlas",
+      1 - access_offset, 0,
+      std::vector{
+      sdl_rect{TILE_WIDTH *  2, TILE_HEIGHT * 2, TILE_WIDTH, TILE_HEIGHT}
+      }});
 
     // TODO: solve the mountain placement problem. irregular height is an issue.
-    data_.emplace("mountain"     , texture_name_and_source{ "tile_atlas",
-      sdl_rect{TILE_WIDTH * 15, TILE_HEIGHT * 0, TILE_WIDTH, TILE_HEIGHT + 5}});
+    data_.emplace("mountain"     , sprite_data{ "tile_atlas",
+      1 - access_offset, 0,
+      std::vector{
+      sdl_rect{TILE_WIDTH * 15, TILE_HEIGHT * 0, TILE_WIDTH, mountain_height}
+      }});
   }
   // clang-format on
 };

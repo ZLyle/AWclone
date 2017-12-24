@@ -9,6 +9,8 @@
 
 namespace ecs {
 
+// probably shouldn't inherit from ecs::manager since the way it stores entities
+// is fundamentally so different?
 struct tile_manager {
   void init(const unsigned width, const unsigned height) {
     tile_matrix_.resize(width);
@@ -65,18 +67,13 @@ struct tile_manager {
   }
   // clang-format on
 
-  void render() const {
-    auto& renderer = *(tile_matrix_.at(0).at(0).sprite_.renderer_);
-    gfx::render_helper::clear(renderer);
-
+  void prepare_render() {
     for (auto& outer_vec : tile_matrix_) {
       for (auto& current_tile : outer_vec) {
-        ecs::sprite_system::render(current_tile.sprite_,
+        ecs::sprite_system::update(current_tile.sprite_,
                                    current_tile.location_);
       }
     }
-
-    gfx::render_helper::flip_buffer(renderer);
   }
 
   std::vector<std::vector<tile>> tile_matrix_;
