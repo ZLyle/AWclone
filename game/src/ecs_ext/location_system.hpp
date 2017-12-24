@@ -7,7 +7,7 @@ namespace ecs {
 
 struct location_system {
   static void
-  modify(logical_location_comp& target, const int new_x, const int new_y) {
+  modify(location_comp& target, const int new_x, const int new_y) {
     target.x_ = new_x;
     target.y_ = new_y;
   }

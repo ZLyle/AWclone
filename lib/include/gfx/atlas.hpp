@@ -21,9 +21,8 @@ struct atlas {
   std::map<std::string, sprite_data> map_data_;
   std::map<std::string, sprite_data> unit_data_;
 
-  atlas() {
-    map_atlas();
-  }
+  atlas() { map_atlas(); }
+
   // clang-format off
   void map_atlas() {
     unsigned access_offset = 1;

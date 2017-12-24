@@ -5,11 +5,11 @@
 
 namespace ecs {
 
-struct logical_location_comp : public component {
+struct location_comp : public component {
   int x_;
   int y_;
 };
 
-}
+}  // namespace ecs
 
 #endif  // ECS_EXT_LOCATION_COMP_HPP_

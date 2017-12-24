@@ -38,9 +38,9 @@ int main() {
   util::timer timer;
   timer.start();
   unsigned interval_start = timer.get_ticks();
-  bool quit_flag = false;
+  bool     quit_flag      = false;
   while (!quit_flag) {
-    while((timer.get_ticks() - interval_start) < gfx::TIME_STEP) {
+    while ((timer.get_ticks() - interval_start) < gfx::TIME_STEP) {
 
       while (SDL_PollEvent(&event_handler) != 0) {
         switch (event_handler.type) {
@@ -54,7 +54,6 @@ int main() {
           } break;
         }
       }
-
     }
     interval_start = timer.get_ticks();
 

@@ -60,8 +60,8 @@ struct sprite_system {
     }
   }
 
-  static void update_render(const sprite_comp&           comp_to_render,
-                            const logical_location_comp& comp_with_target) {
+  static void update_render(const sprite_comp&   comp_to_render,
+                            const location_comp& comp_with_target) {
     gfx::sdl_rect source, target;
 
     source   = comp_to_render.source_.at(comp_to_render.current_frame_);

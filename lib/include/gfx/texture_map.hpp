@@ -14,9 +14,9 @@ private:
   std::map<std::string, texture_ptr> texture_map_;
 
 public:
-  void load_texture(const renderer_ptr&     renderer,
-                    const std::string texture_handle,
-                    const std::string path) {
+  void load_texture(const renderer_ptr& renderer,
+                    const std::string   texture_handle,
+                    const std::string   path) {
     if (texture_map_.find(texture_handle) == texture_map_.end()) {
       auto image_texture = std::make_shared<sdl_texture>(*renderer, path);
 

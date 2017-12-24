@@ -8,8 +8,8 @@
 namespace ecs {
 
 struct tile : public entity {
-  logical_location_comp location_;
-  sprite_comp           sprite_;
+  location_comp location_;
+  sprite_comp   sprite_;
 };
 
 }  // namespace ecs
