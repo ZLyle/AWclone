@@ -70,8 +70,9 @@ struct tile_manager {
   void prepare_render() {
     for (auto& outer_vec : tile_matrix_) {
       for (auto& current_tile : outer_vec) {
-        ecs::sprite_system::update(current_tile.sprite_,
-                                   current_tile.location_);
+        ecs::sprite_system::update_animations(current_tile.sprite_);
+        ecs::sprite_system::update_render(current_tile.sprite_,
+                                          current_tile.location_);
       }
     }
   }

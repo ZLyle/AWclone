@@ -5,7 +5,7 @@
 
 namespace ecs {
 
-struct location_comp : public component {
+struct logical_location_comp : public component {
   int x_;
   int y_;
 };

@@ -26,10 +26,16 @@ struct sprite_system {
   static void replace_source(sprite_comp&       comp_to_modify,
                              const std::string& tile_name,
                              const gfx::atlas&  tile_map) {
-    comp_to_modify.total_frames_ = tile_map.data_.at(tile_name).total_frames_;
-    comp_to_modify.hold_time_    = tile_map.data_.at(tile_name).hold_time_;
-    comp_to_modify.frames_held_  = 0;
-    comp_to_modify.source_       = tile_map.data_.at(tile_name).source_;
+    // clang-format off
+    comp_to_modify.total_frames_
+      = tile_map.map_data_.at(tile_name).total_frames_;
+    comp_to_modify.hold_time_
+      = tile_map.map_data_.at(tile_name).hold_time_;
+    comp_to_modify.frames_held_
+      = 0;
+    comp_to_modify.source_
+      = tile_map.map_data_.at(tile_name).source_;
+    // clang-format on
   }
 
   static void init(sprite_comp&             comp_to_modify,
@@ -54,8 +60,8 @@ struct sprite_system {
     }
   }
 
-  static void update_render(const sprite_comp&   comp_to_render,
-                            const location_comp& comp_with_target) {
+  static void update_render(const sprite_comp&           comp_to_render,
+                            const logical_location_comp& comp_with_target) {
     gfx::sdl_rect source, target;
 
     source   = comp_to_render.source_.at(comp_to_render.current_frame_);
@@ -68,12 +74,6 @@ struct sprite_system {
                                     (*comp_to_render.texture_.get()),
                                     source,
                                     target);
-  }
-
-  static void update(sprite_comp&         comp_to_render,
-                     const location_comp& comp_with_target) {
-    update_animations(comp_to_render);
-    update_render(comp_to_render, comp_with_target);
   }
 };
 

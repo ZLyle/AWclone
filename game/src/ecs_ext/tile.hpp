@@ -8,11 +8,10 @@
 namespace ecs {
 
 struct tile : public entity {
-  location_comp location_;
-  sprite_comp   sprite_;
-  //name_comp     name_;
+  logical_location_comp location_;
+  sprite_comp           sprite_;
 };
 
-}
+}  // namespace ecs
 
 #endif  // ECS_EXT_TILE_HPP_
