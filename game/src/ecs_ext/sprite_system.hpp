@@ -28,13 +28,13 @@ struct sprite_system {
                              const gfx::atlas&  tile_map) {
     // clang-format off
     comp_to_modify.total_frames_
-      = tile_map.map_data_.at(tile_name).total_frames_;
+      = tile_map.data_.at(tile_name).total_frames_;
     comp_to_modify.hold_time_
-      = tile_map.map_data_.at(tile_name).hold_time_;
+      = tile_map.data_.at(tile_name).hold_time_;
     comp_to_modify.frames_held_
       = 0;
     comp_to_modify.source_
-      = tile_map.map_data_.at(tile_name).source_;
+      = tile_map.data_.at(tile_name).source_;
     // clang-format on
   }
 
