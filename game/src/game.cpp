@@ -13,9 +13,10 @@ int main() {
   gfx::sdl_init sdl_initializer;
 
   // file finding
-  std::string base_path       = SDL_GetBasePath();
-  std::string tile_sheet_path = "res/map_tiles/map_tile_sheet.png";
-  std::string gfx_config_path = "cfg/gfx_config";
+  std::string base_path         = SDL_GetBasePath();
+  std::string tile_sheet_path   = "res/map_tiles/map_tile_sheet.png";
+  std::string gfx_config_path   = "cfg/gfx_config";
+  std::string atlas_config_path = "cfg/atlas_config";
 
   // config loading
   gfx::load_gfx_config(base_path + gfx_config_path);
@@ -33,7 +34,7 @@ int main() {
   gfx::texture_map texture_map;
   texture_map.load_texture(renderer, "tile_atlas", base_path + tile_sheet_path);
 
-  gfx::atlas atlas;
+  gfx::atlas atlas(base_path + atlas_config_path);
 
   // test map setup
   ecs::tile_manager game_map = ecs::tile_manager();

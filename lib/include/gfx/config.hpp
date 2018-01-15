@@ -12,6 +12,8 @@
 
 namespace gfx {
 
+const long STREAM_MAX = std::numeric_limits<std::streamsize>::max();
+
 static int TILE_WIDTH  = 16;
 static int TILE_HEIGHT = 16;
 
@@ -36,7 +38,7 @@ static void load_gfx_config(std::string path) {
     input_file_stream >> std::ws;
     if (input_file_stream.peek() != '#') {
       std::getline(input_file_stream, current_setting, '=');
-      std::getline(input_file_stream, current_value, '\n');
+      std::getline(input_file_stream, current_value); // TODO: improve?
 
       if (current_setting == "TILE_WIDTH") {
         TILE_WIDTH = util::lexical_cast(current_value);
@@ -54,8 +56,7 @@ static void load_gfx_config(std::string path) {
       }
 
     } else {
-      input_file_stream.ignore(std::numeric_limits<std::streamsize>::max(),
-                               '\n');
+      input_file_stream.ignore(STREAM_MAX, '\n');
     }
   } while (input_file_stream.good());
 }
