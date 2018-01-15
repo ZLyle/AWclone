@@ -65,6 +65,7 @@ struct sprite_system {
     gfx::sdl_rect source, target;
 
     source   = comp_to_render.source_.at(comp_to_render.current_frame_);
+    // TODO: decouple this from TILE_[width/height]
     target.x = (comp_with_target.x_) * gfx::DEST_DIM_FACTOR * gfx::TILE_WIDTH;
     target.y = (comp_with_target.y_) * gfx::DEST_DIM_FACTOR * gfx::TILE_HEIGHT;
     target.w = gfx::DEST_DIM_FACTOR * gfx::TILE_WIDTH;

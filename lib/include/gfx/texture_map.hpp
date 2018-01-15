@@ -11,13 +11,13 @@ namespace gfx {
 
 struct texture_map {
 private:
-  std::map<std::string, texture_ptr> texture_map_;
+  std::map<std::string, texture_ptr> data_;
 
 public:
   void load_texture(const renderer_ptr& renderer,
                     const std::string   texture_handle,
                     const std::string   path) {
-    if (texture_map_.find(texture_handle) == texture_map_.end()) {
+    if (data_.find(texture_handle) == data_.end()) {
       auto image_texture = std::make_shared<sdl_texture>(*renderer, path);
 
       if (image_texture.get() == nullptr) {
@@ -25,12 +25,12 @@ public:
                path.c_str(),
                IMG_GetError());
       }
-      texture_map_.emplace(texture_handle, image_texture);
+      data_.emplace(texture_handle, image_texture);
     }
   }
 
   texture_ptr get_texture_at(const std::string id) const {
-    return texture_map_.at(id);
+    return data_.at(id);
   }
 };
 
