@@ -1,4 +1,4 @@
-## Advance Wars Clone 
+## Advance Wars Clone
 ######(change name later to not get sued)
 
 #### README and TODO

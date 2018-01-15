@@ -65,6 +65,8 @@ struct sprite_system {
     gfx::sdl_rect source, target;
 
     source   = comp_to_render.source_.at(comp_to_render.current_frame_);
+    // TODO: decouple this shit from the logical location so we can use it
+    // for things that aren't logically represented in the game.
     target.x = (comp_with_target.x_) * gfx::DEST_DIM_FACTOR * source.w;
     target.y = (comp_with_target.y_) * gfx::DEST_DIM_FACTOR * source.h;
     target.w = gfx::DEST_DIM_FACTOR * source.w;

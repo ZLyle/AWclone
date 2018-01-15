@@ -1,8 +1,6 @@
 ## Shit to get done
 #### Important shit
 
-Note that everything implemented MUST be designed such that it can be extended to include features from later games, and maybe our own shit.
-
 + Implement a data structure to store the map in a file.
     * Need to figure out what the number of tiles are to be possibly stored.
     * (Plains, Mountains, Woods, Rivers, Roads, Bridges, Sea, Reefs, Shoals (Pipes?))
