@@ -15,7 +15,7 @@ int main() {
   // file finding
   std::string base_path       = SDL_GetBasePath();
   std::string tile_sheet_path = "res/map_tiles/map_tile_sheet.png";
-  std::string gfx_config_path = "gfx_config";
+  std::string gfx_config_path = "cfg/gfx_config";
 
   // config loading
   gfx::load_gfx_config(base_path + gfx_config_path);

@@ -14,15 +14,4 @@ add_executable(game
 
 target_link_libraries(game PRIVATE lib)
 
-
-set(CONFIG_FILES
-  gfx_config
-  )
-
-foreach(ASSET_FILE ${CONFIG_FILES})
-  if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    configure_file(${ASSET_FILE} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG}/${ASSET_FILE} COPYONLY)
-  elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
-    configure_file(${ASSET_FILE} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}/${ASSET_FILE} COPYONLY)
-  endif()
-endforeach(ASSET_FILE)
+add_subdirectory(cfg)

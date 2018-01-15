@@ -12,16 +12,17 @@
 
 namespace gfx {
 
+static int TILE_WIDTH  = 16;
+static int TILE_HEIGHT = 16;
+
 // default config values
-static int TILE_WIDTH           = 16;
-static int TILE_HEIGHT          = 16;
 static int TILE_DISPLAY_COLUMNS = 16;
 static int TILE_DISPLAY_ROWS    = 9;
 static int DEST_DIM_FACTOR      = 2;
 
-// TODO: maybe figure out the timing one day
-const int  TARGET_FRAME_RATE    = 60;
-const int  TIME_STEP            = static_cast<int>(1000.0f / TARGET_FRAME_RATE);
+// TODO: maybe figure out the timing one day so the user can set this
+const int TARGET_FRAME_RATE = 60;
+const int TIME_STEP         = static_cast<int>(1000.0f / TARGET_FRAME_RATE);
 
 static void load_gfx_config(std::string path) {
   std::ifstream input_file_stream(path.c_str(), std::ios::in);
@@ -37,7 +38,11 @@ static void load_gfx_config(std::string path) {
       std::getline(input_file_stream, current_setting, '=');
       std::getline(input_file_stream, current_value, '\n');
 
-      if (current_setting == "TILE_DISPLAY_COLUMNS") {
+      if (current_setting == "TILE_WIDTH") {
+        TILE_WIDTH = util::lexical_cast(current_value);
+      } else if (current_setting == "TILE_HEIGHT") {
+        TILE_HEIGHT = util::lexical_cast(current_value);
+      } else if (current_setting == "TILE_DISPLAY_COLUMNS") {
         TILE_DISPLAY_COLUMNS = util::lexical_cast(current_value);
       } else if (current_setting == "TILE_DISPLAY_ROWS") {
         TILE_DISPLAY_ROWS = util::lexical_cast(current_value);

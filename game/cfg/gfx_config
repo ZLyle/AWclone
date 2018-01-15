@@ -1,5 +1,5 @@
 # comment until next line
-TILE_WIDTH=16
+TILE_WIDTH=16 # comment after setting
 TILE_HEIGHT=16
 TILE_DISPLAY_COLUMNS=16
 TILE_DISPLAY_ROWS=9
