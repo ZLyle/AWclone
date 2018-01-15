@@ -1,6 +1,7 @@
 #ifndef ECS_MANAGER_HPP_
 #define ECS_MANAGER_HPP_
 
+/*
 #include <set>
 #include <cassert>
 #include <limits>
@@ -12,7 +13,6 @@
 namespace ecs {
 
 class manager {
-/*
   std::set<entity> entities;
   entity_id        last_entity_created;
 
@@ -21,9 +21,9 @@ class manager {
     entities.insert(++last_entity_created);
     return last_entity_created;
   }
-*/
 };
 
 }  // namespace ecs
+*/
 
 #endif  // ECS_MANAGER_HPP_

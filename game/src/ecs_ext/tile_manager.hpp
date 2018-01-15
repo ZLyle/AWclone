@@ -9,8 +9,6 @@
 
 namespace ecs {
 
-// probably shouldn't inherit from ecs::manager since the way it stores entities
-// is fundamentally so different?
 struct tile_manager {
   void init(const unsigned width, const unsigned height) {
     tile_matrix_.resize(width);

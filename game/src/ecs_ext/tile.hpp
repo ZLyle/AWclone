@@ -7,7 +7,7 @@
 
 namespace ecs {
 
-struct tile : public entity {
+struct tile {
   location_comp location_;
   sprite_comp   sprite_;
 };

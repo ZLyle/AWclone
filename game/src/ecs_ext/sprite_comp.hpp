@@ -10,7 +10,7 @@
 
 namespace ecs {
 
-struct sprite_comp : public component {
+struct sprite_comp {
   gfx::renderer_ptr          renderer_;
   gfx::texture_ptr           texture_;
   //int                        screen_x_;
