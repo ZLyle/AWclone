@@ -2,6 +2,7 @@
 #define ECX_EXT_TILE_MANAGER_HPP_
 
 #include <vector>
+#include <cstdint>
 
 #include "tile.hpp"
 #include "location_system.hpp"
@@ -10,12 +11,12 @@
 namespace ecs {
 
 struct tile_manager {
-  void init(const unsigned width, const unsigned height) {
+  void init(const uint32_t width, const uint32_t height) {
     tile_matrix_.resize(width);
-    int x = 0;
+    int32_t x = 0;
     for (auto& inner_vector : tile_matrix_) {
       inner_vector.resize(height);
-      int y = 0;
+      int32_t y = 0;
       for (auto& current_tile : inner_vector) {
         ecs::location_system::modify(current_tile.location_, x, y);
         ++y;
@@ -25,17 +26,17 @@ struct tile_manager {
   }
 
   // clang-format off
-  void modify_location_at(const int x, const int y) {
+  void modify_location_at(const int32_t x, const int32_t y) {
     ecs::location_system
        ::modify(tile_matrix_
-                  .at(static_cast<unsigned>(x))
-                  .at(static_cast<unsigned>(y))
+                  .at(static_cast<uint32_t>(x))
+                  .at(static_cast<uint32_t>(y))
                   .location_,
                 x,
                 y);
   }
 
-  void init_sprite_at(const int x, const int y,
+  void init_sprite_at(const int32_t x, const int32_t y,
                       const gfx::renderer_ptr& new_renderer,
                       const std::string&       texture_name,
                       const gfx::texture_map&  texture_map,
@@ -43,8 +44,8 @@ struct tile_manager {
                       const gfx::atlas&        tile_map) {
     ecs::sprite_system
        ::init(tile_matrix_
-                .at(static_cast<unsigned>(x))
-                .at(static_cast<unsigned>(y))
+                .at(static_cast<uint32_t>(x))
+                .at(static_cast<uint32_t>(y))
                 .sprite_,
               new_renderer,
               texture_name,
@@ -53,7 +54,7 @@ struct tile_manager {
               tile_map);
   }
 
-  void init_tile(const int x, const int y,
+  void init_tile(const int32_t x, const int32_t y,
                  const gfx::renderer_ptr& new_renderer,
                  const std::string&       texture_name,
                  const gfx::texture_map&  texture_map,

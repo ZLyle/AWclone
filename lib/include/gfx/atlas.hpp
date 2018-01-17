@@ -4,6 +4,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <cstdint>
 
 #include "sdl_wrapper.hpp"
 #include "config.hpp"
@@ -14,8 +15,8 @@ namespace gfx {
 struct atlas {
   struct sprite_data {
     const std::string           texture_name_;
-    const unsigned              total_frames_;
-    const unsigned              hold_time_;
+    const uint32_t              total_frames_;
+    const uint32_t              hold_time_;
     const std::vector<sdl_rect> source_;
   };
 
@@ -23,7 +24,7 @@ struct atlas {
 
   atlas(std::string path) { load_config(path); }
 
-  void load_config(std::string path) {
+  void load_config(const std::string& path) {
     std::ifstream input_file_stream(path.c_str(), std::ios::in);
 
     assert(input_file_stream.is_open());
@@ -65,8 +66,8 @@ struct atlas {
           key,
           sprite_data{
               name,
-              static_cast<unsigned>(util::lexical_cast(frame_count) - 1),
-              static_cast<unsigned>(util::lexical_cast(hold_time) * TIME_STEP),
+              static_cast<uint32_t>(util::lexical_cast(frame_count) - 1),
+              static_cast<uint32_t>(util::lexical_cast(hold_time) * TIME_STEP),
               frames});
 
     } while (input_file_stream.good());

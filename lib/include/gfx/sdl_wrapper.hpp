@@ -5,6 +5,7 @@
 #include <SDL2/SDL_image.h>
 #include <string>
 #include <memory>
+#include <cstdint>
 
 namespace gfx {
 
@@ -13,8 +14,8 @@ typedef SDL_Rect sdl_rect;
 class sdl_init {
 public:
   sdl_init() {
-    int sdl_flags = SDL_INIT_VIDEO;
-    int img_flags = IMG_INIT_PNG;
+    int32_t sdl_flags = SDL_INIT_VIDEO;
+    int32_t img_flags = IMG_INIT_PNG;
 
     if (SDL_Init(static_cast<Uint32>(sdl_flags)) < 0) {
       printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
@@ -34,7 +35,7 @@ public:
 
 class sdl_window {
 public:
-  sdl_window(const int width, const int height) {
+  sdl_window(const int32_t width, const int32_t height) {
     window_ = SDL_CreateWindow("Advance(d) Wars",
                                SDL_WINDOWPOS_UNDEFINED,
                                SDL_WINDOWPOS_UNDEFINED,
@@ -155,10 +156,10 @@ struct render_helper {
   }
 
   static void set_draw_color(const sdl_renderer& renderer,
-                             const Uint8         r,
-                             const Uint8         b,
-                             const Uint8         g,
-                             const Uint8         a) {
+                             const uint8_t       r,
+                             const uint8_t       b,
+                             const uint8_t       g,
+                             const uint8_t       a) {
     SDL_SetRenderDrawColor(renderer.get(), r, b, g, a);
   }
 };

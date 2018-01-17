@@ -7,26 +7,27 @@
 #include <sstream>
 #include <string>
 #include <limits>
+#include <cstdint>
 
 #include "util/lexical.hpp"
 
 namespace gfx {
 
-const long STREAM_MAX = std::numeric_limits<std::streamsize>::max();
+const int64_t STREAM_MAX = std::numeric_limits<std::streamsize>::max();
 
-static int TILE_WIDTH  = 16;
-static int TILE_HEIGHT = 16;
+static int32_t TILE_WIDTH  = 16;
+static int32_t TILE_HEIGHT = 16;
 
 // default config values
-static int TILE_DISPLAY_COLUMNS = 16;
-static int TILE_DISPLAY_ROWS    = 9;
-static int DEST_DIM_FACTOR      = 2;
+static int32_t TILE_DISPLAY_COLUMNS = 16;
+static int32_t TILE_DISPLAY_ROWS    = 9;
+static int32_t DEST_DIM_FACTOR      = 2;
 
 // TODO: maybe figure out the timing one day so the user can set this
-const int TARGET_FRAME_RATE = 60;
-const int TIME_STEP         = static_cast<int>(1000.0f / TARGET_FRAME_RATE);
+const int32_t TARGET_FRAME_RATE = 60;
+const int32_t TIME_STEP = static_cast<uint32_t>(1000.0f / TARGET_FRAME_RATE);
 
-inline void load_gfx_config(std::string path) {
+inline void load_gfx_config(const std::string& path) {
   std::ifstream input_file_stream(path.c_str(), std::ios::in);
 
   assert(input_file_stream.is_open());
@@ -38,7 +39,7 @@ inline void load_gfx_config(std::string path) {
     input_file_stream >> std::ws;
     if (input_file_stream.peek() != '#') {
       std::getline(input_file_stream, current_setting, '=');
-      std::getline(input_file_stream, current_value); // TODO: improve?
+      std::getline(input_file_stream, current_value);  // TODO: improve?
 
       if (current_setting == "TILE_WIDTH") {
         TILE_WIDTH = util::lexical_cast(current_value);

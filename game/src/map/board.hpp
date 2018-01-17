@@ -4,13 +4,14 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <cstdint>
 
 #include "../ecs_ext/tile_manager.hpp"
 
 namespace map {
 
-const int MAP_ROWS    = 9;
-const int MAP_COLUMNS = 16;
+const uint16_t MAP_ROWS    = 9;
+const uint16_t MAP_COLUMNS = 16;
 
 void load(ecs::tile_manager&,
           const gfx::renderer_ptr&,

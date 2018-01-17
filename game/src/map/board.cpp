@@ -6,7 +6,7 @@ void load(ecs::tile_manager&       manager,
           const gfx::renderer_ptr& renderer,
           const gfx::texture_map&  texture_map,
           const gfx::atlas&        atlas) {
-  int map_array[MAP_ROWS][MAP_COLUMNS] = {
+  uint8_t map_array[MAP_ROWS][MAP_COLUMNS] = {
       {1, 2, 1, 3, 3, 4, 4, 6, 3, 3, 3, 3, 3, 3, 3, 3},
       {1, 2, 1, 3, 3, 4, 4, 6, 3, 3, 3, 3, 3, 3, 3, 3},
       {1, 2, 1, 3, 3, 4, 4, 6, 3, 3, 3, 3, 3, 3, 3, 3},
@@ -20,8 +20,8 @@ void load(ecs::tile_manager&       manager,
   manager.init(MAP_COLUMNS, MAP_ROWS);
 
   // clang-format off
-  for (int y = 0; y < MAP_ROWS; ++y) {
-    for (int x = 0; x < MAP_COLUMNS; ++x) {
+  for (uint16_t y = 0; y < MAP_ROWS; ++y) {
+    for (uint16_t x = 0; x < MAP_COLUMNS; ++x) {
       switch (map_array[y][x]) {
         case 1:
           manager.init_tile(x, y, renderer, "tile_atlas",

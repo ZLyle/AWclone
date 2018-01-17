@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <cstdint>
 
 #include "gfx/sdl_wrapper.hpp"
 #include "ecs/component.hpp"
@@ -15,10 +16,10 @@ struct sprite_comp {
   gfx::texture_ptr           texture_;
   //int                        screen_x_;
   //int                        screen_y_;
-  unsigned                   total_frames_;
-  unsigned                   current_frame_;
-  unsigned                   hold_time_;
-  unsigned                   frames_held_;
+  uint32_t                   total_frames_;
+  uint32_t                   current_frame_;
+  uint32_t                   hold_time_;
+  uint32_t                   frames_held_;
   std::vector<gfx::sdl_rect> source_;
 };
 

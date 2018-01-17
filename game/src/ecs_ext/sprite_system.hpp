@@ -2,6 +2,7 @@
 #define ECS_EXT_SPRITE_SYSTEM_HPP_
 
 #include <cassert>
+#include <cstdint>
 
 #include "gfx/sdl_wrapper.hpp"
 #include "gfx/texture_map.hpp"

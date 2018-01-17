@@ -2,6 +2,7 @@
 #define UTIL_TIMER_HPP_
 
 #include <SDL2/SDL.h>
+#include <cstdint>
 
 namespace util {
 
@@ -63,8 +64,8 @@ public:
 
 private:
   enum timer_state { STOPPED, STARTED, PAUSED };
-  Uint32      start_ticks_;
-  Uint32      paused_ticks_;
+  uint32_t    start_ticks_;
+  uint32_t    paused_ticks_;
   timer_state state_;
 };
 
