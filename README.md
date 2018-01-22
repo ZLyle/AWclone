@@ -1,12 +1,6 @@
 ## Advance Wars Clone
 ######(change name later to not get sued)
 
-#### README and TODO
-
-These both use markdown (.md), it's easy [so learn it eventually.](https://help.github.com/articles/basic-writing-and-formatting-syntax/)
-
-Use the todo list [(TODO.md)](TODO.md), update it as you add shit.
-
 #### Compiling/Making
 
 Maintain CMakeLists.txt by adding/removing new/removed source files.
