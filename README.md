@@ -3,8 +3,6 @@
 
 #### Compiling/Making
 
-Maintain CMakeLists.txt by adding/removing new/removed source files.
-
 Commands to build (invoke within build directory), prefer Debug and Release:
 ```
 > cmake -G <generator> -DCMAKE_BUILD_TYPE=<type> <path up (to project root)>
