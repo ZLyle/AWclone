@@ -66,12 +66,26 @@ struct tile_manager {
   }
   // clang-format on
 
+  void prepare_screen_position(ecs::tile& current_tile) {
+    ecs::sprite_comp& sprite = current_tile.sprite_;
+    const gfx::sdl_rect    source = sprite.source_.at(sprite.current_frame_);
+
+    const auto x = current_tile.location_.x_ * gfx::DEST_DIM_FACTOR * source.w;
+    const auto y = current_tile.location_.y_ * gfx::DEST_DIM_FACTOR * source.h;
+    ecs::sprite_system::update_screen_position(sprite, x, y);
+
+    const auto w = gfx::DEST_DIM_FACTOR * source.w;
+    const auto h = gfx::DEST_DIM_FACTOR * source.h;
+    ecs::sprite_system::update_screen_dimensions(sprite, w, h);
+
+  }
+
   void prepare_render() {
     for (auto& outer_vec : tile_matrix_) {
       for (auto& current_tile : outer_vec) {
-        ecs::sprite_system::update_animations(current_tile.sprite_);
-        ecs::sprite_system::update_render(current_tile.sprite_,
-                                          current_tile.location_);
+        ecs::sprite_system::update_animation(current_tile.sprite_);
+        prepare_screen_position(current_tile);
+        ecs::sprite_system::render_to_backbuffer(current_tile.sprite_);
       }
     }
   }

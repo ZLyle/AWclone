@@ -14,8 +14,10 @@ namespace ecs {
 struct sprite_comp {
   gfx::renderer_ptr          renderer_;
   gfx::texture_ptr           texture_;
-  //int                        screen_x_;
-  //int                        screen_y_;
+  int                        screen_x_;
+  int                        screen_y_;
+  int                        screen_w_;
+  int                        screen_h_;
   uint32_t                   total_frames_;
   uint32_t                   current_frame_;
   uint32_t                   hold_time_;

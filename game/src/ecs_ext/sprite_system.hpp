@@ -50,7 +50,7 @@ struct sprite_system {
     replace_source(comp_to_modify, tile_name, tile_map);
   }
 
-  static void update_animations(sprite_comp& comp_to_modify) {
+  static void update_animation(sprite_comp& comp_to_modify) {
     if (comp_to_modify.hold_time_ != 0) {
       if (comp_to_modify.frames_held_ == comp_to_modify.hold_time_) {
         ++comp_to_modify.current_frame_;
@@ -61,17 +61,30 @@ struct sprite_system {
     }
   }
 
-  static void update_render(const sprite_comp&   comp_to_render,
-                            const location_comp& comp_with_target) {
-    gfx::sdl_rect source, target;
+  static void update_screen_position(sprite_comp&  comp_to_modify,
+                                     const int32_t screen_x,
+                                     const int32_t screen_y) {
+    comp_to_modify.screen_x_ = screen_x;
+    comp_to_modify.screen_y_ = screen_y;
+  }
 
-    source   = comp_to_render.source_.at(comp_to_render.current_frame_);
-    // TODO: decouple this shit from the logical location so we can use it
-    // for things that aren't logically represented in the game.
-    target.x = (comp_with_target.x_) * gfx::DEST_DIM_FACTOR * source.w;
-    target.y = (comp_with_target.y_) * gfx::DEST_DIM_FACTOR * source.h;
-    target.w = gfx::DEST_DIM_FACTOR * source.w;
-    target.h = gfx::DEST_DIM_FACTOR * source.h;
+  static void update_screen_dimensions(sprite_comp&  comp_to_modify,
+                                       const int32_t screen_w,
+                                       const int32_t screen_h) {
+    comp_to_modify.screen_w_ = screen_w;
+    comp_to_modify.screen_h_ = screen_h;
+  }
+
+  static void render_to_backbuffer(const ecs::sprite_comp& comp_to_render) {
+    gfx::sdl_rect target;
+
+    const auto& source =
+        comp_to_render.source_.at(comp_to_render.current_frame_);
+
+    target.x = comp_to_render.screen_x_;
+    target.y = comp_to_render.screen_y_;
+    target.w = comp_to_render.screen_w_;
+    target.h = comp_to_render.screen_h_;
 
     gfx::render_helper::render_copy((*comp_to_render.renderer_.get()),
                                     (*comp_to_render.texture_.get()),
