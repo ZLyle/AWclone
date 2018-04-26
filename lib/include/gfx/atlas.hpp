@@ -25,12 +25,6 @@ struct atlas {
 
   atlas(std::string path) { load_config(path); }
 
-  static std::string getline_and_strip_comments(std::ifstream& input_stream) {
-    std::string to_return;
-    std::getline(input_stream >> std::ws, to_return);
-    return std::regex_replace(to_return, std::regex(R"(\s*#.*)"), "");
-  }
-
   void load_config(const std::string& path) {
     std::ifstream input_file_stream(path.c_str(), std::ios::in);
 
@@ -59,23 +53,23 @@ struct atlas {
 
       input_file_stream.ignore(STREAM_MAX, '\n');  // skip opening brace
 
-      key = getline_and_strip_comments(input_file_stream);
+      key = util::getline_and_strip_comments(input_file_stream);
       assert(key != "");
 
-      name = getline_and_strip_comments(input_file_stream);
+      name = util::getline_and_strip_comments(input_file_stream);
       assert(name != "");
 
-      frame_count = getline_and_strip_comments(input_file_stream);
+      frame_count = util::getline_and_strip_comments(input_file_stream);
       frame_count = std::regex_replace(frame_count, non_numeric, "");
       assert(frame_count != "");
 
-      hold_time = getline_and_strip_comments(input_file_stream);
+      hold_time = util::getline_and_strip_comments(input_file_stream);
       hold_time = std::regex_replace(hold_time, non_numeric, "");
       assert(hold_time != "");
 
       while (input_file_stream.peek() != '}' && input_file_stream.good()) {
         std::smatch dim_matches;
-        const auto  line = getline_and_strip_comments(input_file_stream);
+        const auto  line = util::getline_and_strip_comments(input_file_stream);
         std::regex_search(line, dim_matches, dimensions);
         assert(dim_matches.size() == 5);
 

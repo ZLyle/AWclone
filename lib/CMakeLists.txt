@@ -11,6 +11,7 @@ set(LIB_HEADERS
   ${CMAKE_CURRENT_LIST_DIR}/include/gfx/sdl_wrapper.hpp
   ${CMAKE_CURRENT_LIST_DIR}/include/gfx/texture_map.hpp
 
+  ${CMAKE_CURRENT_LIST_DIR}/include/util/lexical.hpp
   ${CMAKE_CURRENT_LIST_DIR}/include/util/timer.hpp
   )
 
