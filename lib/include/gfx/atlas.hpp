@@ -5,6 +5,7 @@
 #include <map>
 #include <vector>
 #include <cstdint>
+#include <regex>
 
 #include "sdl_wrapper.hpp"
 #include "config.hpp"
@@ -24,6 +25,12 @@ struct atlas {
 
   atlas(std::string path) { load_config(path); }
 
+  static std::string getline_and_strip_comments(std::ifstream& input_stream) {
+    std::string to_return;
+    std::getline(input_stream >> std::ws, to_return);
+    return std::regex_replace(to_return, std::regex(R"(\s*#.*)"), "");
+  }
+
   void load_config(const std::string& path) {
     std::ifstream input_file_stream(path.c_str(), std::ios::in);
 
@@ -32,6 +39,8 @@ struct atlas {
 
     std::string           key, name, frame_count, hold_time;
     std::vector<sdl_rect> frames;
+    std::regex            non_numeric(R"([\D])");
+    std::regex            dimensions(R"((\d+),(\d+),(\d+),(\d+))");
 
     do {
       key.clear();
@@ -44,31 +53,47 @@ struct atlas {
         input_file_stream.ignore(STREAM_MAX, '\n');
       }
 
+      if (!input_file_stream.good()) {
+        return;
+      }
+
       input_file_stream.ignore(STREAM_MAX, '\n');  // skip opening brace
-      std::getline(input_file_stream >> std::ws, key);
-      std::getline(input_file_stream >> std::ws, name);
-      std::getline(input_file_stream >> std::ws, frame_count);
-      std::getline(input_file_stream >> std::ws, hold_time);
+
+      key = getline_and_strip_comments(input_file_stream);
+      assert(key != "");
+
+      name = getline_and_strip_comments(input_file_stream);
+      assert(name != "");
+
+      frame_count = getline_and_strip_comments(input_file_stream);
+      frame_count = std::regex_replace(frame_count, non_numeric, "");
+      assert(frame_count != "");
+
+      hold_time = getline_and_strip_comments(input_file_stream);
+      hold_time = std::regex_replace(hold_time, non_numeric, "");
+      assert(hold_time != "");
+
       while (input_file_stream.peek() != '}' && input_file_stream.good()) {
-        std::string x, y, w, h;
-        std::getline(input_file_stream >> std::ws, x, ',');
-        std::getline(input_file_stream >> std::ws, y, ',');
-        std::getline(input_file_stream >> std::ws, w, ',');
-        std::getline(input_file_stream >> std::ws, h);
-        frames.push_back(sdl_rect{util::lexical_cast<int32_t>(x),
-                                  util::lexical_cast<int32_t>(y),
-                                  util::lexical_cast<int32_t>(w),
-                                  util::lexical_cast<int32_t>(h)});
+        std::smatch dim_matches;
+        const auto  line = getline_and_strip_comments(input_file_stream);
+        std::regex_search(line, dim_matches, dimensions);
+        assert(dim_matches.size() == 5);
+
+        frames.push_back(sdl_rect{util::lexical_cast<int32_t>(dim_matches[1]),
+                                  util::lexical_cast<int32_t>(dim_matches[2]),
+                                  util::lexical_cast<int32_t>(dim_matches[3]),
+                                  util::lexical_cast<int32_t>(dim_matches[4])});
       }
       input_file_stream.ignore(STREAM_MAX, '\n');  // skip closing brace
 
       data_.emplace(
           key,
-          sprite_data{
-              name,
-              static_cast<uint32_t>(util::lexical_cast<int32_t>(frame_count) - 1),
-              static_cast<uint32_t>(util::lexical_cast<int32_t>(hold_time) * TIME_STEP),
-              frames});
+          sprite_data{name,
+                      static_cast<uint32_t>(
+                          util::lexical_cast<int32_t>(frame_count) - 1),
+                      static_cast<uint32_t>(
+                          util::lexical_cast<int32_t>(hold_time) * TIME_STEP),
+                      frames});
 
     } while (input_file_stream.good());
   }

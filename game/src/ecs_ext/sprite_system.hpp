@@ -76,15 +76,13 @@ struct sprite_system {
   }
 
   static void render_to_backbuffer(const ecs::sprite_comp& comp_to_render) {
-    gfx::sdl_rect target;
-
     const auto& source =
         comp_to_render.source_.at(comp_to_render.current_frame_);
 
-    target.x = comp_to_render.screen_x_;
-    target.y = comp_to_render.screen_y_;
-    target.w = comp_to_render.screen_w_;
-    target.h = comp_to_render.screen_h_;
+    const gfx::sdl_rect target = {comp_to_render.screen_x_,
+                                  comp_to_render.screen_y_,
+                                  comp_to_render.screen_w_,
+                                  comp_to_render.screen_h_};
 
     gfx::render_helper::render_copy((*comp_to_render.renderer_.get()),
                                     (*comp_to_render.texture_.get()),
