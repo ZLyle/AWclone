@@ -1,0 +1,67 @@
+{
+   i965_dri
+   Memcheck:Addr4
+   obj:/usr/lib/dri/i965_dri.so
+}
+
+{
+   i965_dri
+   Memcheck:Addr8
+   obj:/usr/lib/dri/i965_dri.so
+}
+
+{
+   i965_dri
+   Memcheck:Addr1
+   fun:memmove
+   obj:/usr/lib/dri/i965_dri.so
+}
+
+{
+   i965_dri
+   Memcheck:Addr2
+   fun:memmove
+   obj:/usr/lib/dri/i965_dri.so
+}
+
+{
+   i965_dri
+   Memcheck:Addr4
+   fun:memmove
+   obj:/usr/lib/dri/i965_dri.so
+}
+
+{
+   i965_dri
+   Memcheck:Addr8
+   fun:memmove
+   obj:/usr/lib/dri/i965_dri.so
+}
+
+{
+   i965_dri
+   Memcheck:Addr1
+   fun:bcmp
+   obj:/usr/lib/dri/i965_dri.so
+}
+
+{
+   i965_dri
+   Memcheck:Addr2
+   fun:bcmp
+   obj:/usr/lib/dri/i965_dri.so
+}
+
+{
+   i965_dri
+   Memcheck:Addr4
+   fun:bcmp
+   obj:/usr/lib/dri/i965_dri.so
+}
+
+{
+   i965_dri
+   Memcheck:Addr8
+   fun:bcmp
+   obj:/usr/lib/dri/i965_dri.so
+}

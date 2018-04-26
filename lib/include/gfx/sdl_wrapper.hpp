@@ -14,10 +14,10 @@ typedef SDL_Rect sdl_rect;
 class sdl_init {
 public:
   sdl_init() {
-    int32_t sdl_flags = SDL_INIT_VIDEO;
+    uint32_t sdl_flags = SDL_INIT_VIDEO;
     int32_t img_flags = IMG_INIT_PNG;
 
-    if (SDL_Init(static_cast<Uint32>(sdl_flags)) < 0) {
+    if (SDL_Init(sdl_flags) < 0) {
       printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
     }
 

@@ -42,15 +42,15 @@ inline void load_gfx_config(const std::string& path) {
       std::getline(input_file_stream, current_value);  // TODO: improve?
 
       if (current_setting == "TILE_WIDTH") {
-        TILE_WIDTH = util::lexical_cast(current_value);
+        TILE_WIDTH = util::lexical_cast<int32_t>(current_value);
       } else if (current_setting == "TILE_HEIGHT") {
-        TILE_HEIGHT = util::lexical_cast(current_value);
+        TILE_HEIGHT = util::lexical_cast<int32_t>(current_value);
       } else if (current_setting == "TILE_DISPLAY_COLUMNS") {
-        TILE_DISPLAY_COLUMNS = util::lexical_cast(current_value);
+        TILE_DISPLAY_COLUMNS = util::lexical_cast<int32_t>(current_value);
       } else if (current_setting == "TILE_DISPLAY_ROWS") {
-        TILE_DISPLAY_ROWS = util::lexical_cast(current_value);
+        TILE_DISPLAY_ROWS = util::lexical_cast<int32_t>(current_value);
       } else if (current_setting == "DEST_DIM_FACTOR") {
-        DEST_DIM_FACTOR = util::lexical_cast(current_value);
+        DEST_DIM_FACTOR = util::lexical_cast<int32_t>(current_value);
       } else {
         printf("Unknown config setting %s given in gfx_config!\n",
                current_setting.c_str());

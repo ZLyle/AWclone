@@ -55,10 +55,10 @@ struct atlas {
         std::getline(input_file_stream >> std::ws, y, ',');
         std::getline(input_file_stream >> std::ws, w, ',');
         std::getline(input_file_stream >> std::ws, h);
-        frames.push_back(sdl_rect{util::lexical_cast(x),
-                                  util::lexical_cast(y),
-                                  util::lexical_cast(w),
-                                  util::lexical_cast(h)});
+        frames.push_back(sdl_rect{util::lexical_cast<int32_t>(x),
+                                  util::lexical_cast<int32_t>(y),
+                                  util::lexical_cast<int32_t>(w),
+                                  util::lexical_cast<int32_t>(h)});
       }
       input_file_stream.ignore(STREAM_MAX, '\n');  // skip closing brace
 
@@ -66,8 +66,8 @@ struct atlas {
           key,
           sprite_data{
               name,
-              static_cast<uint32_t>(util::lexical_cast(frame_count) - 1),
-              static_cast<uint32_t>(util::lexical_cast(hold_time) * TIME_STEP),
+              static_cast<uint32_t>(util::lexical_cast<int32_t>(frame_count) - 1),
+              static_cast<uint32_t>(util::lexical_cast<int32_t>(hold_time) * TIME_STEP),
               frames});
 
     } while (input_file_stream.good());
