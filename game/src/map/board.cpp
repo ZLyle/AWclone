@@ -17,7 +17,7 @@ void load(ecs::tile_manager&       manager,
       {1, 2, 1, 3, 3, 4, 4, 6, 3, 3, 3, 3, 3, 3, 3, 3},
       {1, 2, 1, 3, 3, 4, 4, 6, 3, 3, 3, 3, 3, 3, 3, 3}};
 
-  manager.init(MAP_COLUMNS, MAP_ROWS);
+  manager.init_tile_matrix(MAP_COLUMNS, MAP_ROWS);
 
   // clang-format off
   for (uint16_t y = 0; y < MAP_ROWS; ++y) {

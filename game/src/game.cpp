@@ -13,10 +13,10 @@ int main() {
   gfx::sdl_init sdl_initializer;
 
   // file finding
-  std::string base_path         = SDL_GetBasePath();
-  std::string tile_sheet_path   = "res/map_tiles/map_tile_sheet.png";
-  std::string gfx_config_path   = "cfg/gfx_config";
-  std::string atlas_config_path = "cfg/atlas_config";
+  const std::string base_path         = SDL_GetBasePath();
+  const std::string tile_sheet_path   = "res/map_tiles/map_tile_sheet.png";
+  const std::string gfx_config_path   = "cfg/gfx_config";
+  const std::string atlas_config_path = "cfg/atlas_config";
 
   // config loading
   gfx::load_gfx_config(base_path + gfx_config_path);

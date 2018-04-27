@@ -11,7 +11,9 @@
 namespace ecs {
 
 struct tile_manager {
-  void init(const uint32_t width, const uint32_t height) {
+  // TODO: Probably going to put the call to load from a file in here, and make
+  // this a constructor so we don't have to init the matrix and then each tile.
+  void init_tile_matrix(const uint32_t width, const uint32_t height) {
     tile_matrix_.resize(width);
     int32_t x = 0;
     for (auto& inner_vector : tile_matrix_) {
@@ -26,22 +28,12 @@ struct tile_manager {
   }
 
   // clang-format off
-  void modify_location_at(const int32_t x, const int32_t y) {
-    ecs::location_system
-       ::modify(tile_matrix_
-                  .at(static_cast<uint32_t>(x))
-                  .at(static_cast<uint32_t>(y))
-                  .location_,
-                x,
-                y);
-  }
-
-  void init_sprite_at(const int32_t x, const int32_t y,
-                      const gfx::renderer_ptr& new_renderer,
-                      const std::string&       texture_name,
-                      const gfx::texture_map&  texture_map,
-                      const std::string&       tile_name,
-                      const gfx::atlas&        tile_map) {
+  void modify_sprite_at(const int32_t x, const int32_t y,
+                        const gfx::renderer_ptr& new_renderer,
+                        const std::string&       texture_name,
+                        const gfx::texture_map&  texture_map,
+                        const std::string&       tile_name,
+                        const gfx::atlas&        tile_map) {
     ecs::sprite_system
        ::init(tile_matrix_
                 .at(static_cast<uint32_t>(x))
@@ -60,15 +52,14 @@ struct tile_manager {
                  const gfx::texture_map&  texture_map,
                  const std::string&       tile_name,
                  const gfx::atlas&        tile_map) {
-    modify_location_at(x, y);
-    init_sprite_at(x, y, new_renderer, texture_name,
-                   texture_map, tile_name, tile_map);
+    modify_sprite_at(x, y, new_renderer, texture_name,
+                     texture_map, tile_name, tile_map);
   }
   // clang-format on
 
   void prepare_screen_position(ecs::tile& current_tile) {
-    ecs::sprite_comp& sprite = current_tile.sprite_;
-    const gfx::sdl_rect    source = sprite.source_.at(sprite.current_frame_);
+    ecs::sprite_comp&   sprite = current_tile.sprite_;
+    const gfx::sdl_rect source = sprite.source_.at(sprite.current_frame_);
 
     const auto x = current_tile.location_.x_ * gfx::DEST_DIM_FACTOR * source.w;
     const auto y = current_tile.location_.y_ * gfx::DEST_DIM_FACTOR * source.h;
@@ -77,7 +68,6 @@ struct tile_manager {
     const auto w = gfx::DEST_DIM_FACTOR * source.w;
     const auto h = gfx::DEST_DIM_FACTOR * source.h;
     ecs::sprite_system::update_screen_dimensions(sprite, w, h);
-
   }
 
   void prepare_render() {
@@ -90,6 +80,7 @@ struct tile_manager {
     }
   }
 
+private:
   std::vector<std::vector<tile>> tile_matrix_;
 };
 

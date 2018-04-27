@@ -9,7 +9,7 @@
 
 namespace gfx {
 
-typedef SDL_Rect sdl_rect;
+typedef SDL_Rect sdl_rect; //typedef to conform styles
 
 class sdl_init {
 public:
